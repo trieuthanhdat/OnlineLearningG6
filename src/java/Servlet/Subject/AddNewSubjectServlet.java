@@ -3,12 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package group6.controller;
+package Servlet.Subject;
 
-import group6.entity.subject.SubjectDAO;
-import group6.entity.subject.SubjectDTO;
-import group6.entity.subject.SubjectDetailsDTO;
-import group6.entity.user.UserDTO;
+import DAO.Subject.SubjectDAO;
+import DTO.Subject.SubjectDTO;
+import DTO.Subject.SubjectDetailsDTO;
+import DTO.User.UserDTO;
 import java.io.IOException;
 import java.sql.SQLException;
 import javax.naming.NamingException;

@@ -3,8 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+package DAO.SubjectRegistration;
 
-import group6.utils.DBHelpers;
+import DTO.SubjectRegistration.PackageDTO;
+import utils.DBHelpers;
 import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.Date;
@@ -13,7 +15,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import javax.naming.NamingException;
-import khoalnm.registration.PackageDTO;
 
 /**
  *

@@ -5,10 +5,8 @@
  */
 package Servlet;
 
-import QuizNQuestion.QuizOptionDAO;
-import QuizNQuestion.QuizOptionDTO;
-import QuizNQuestion.QuizQuestionDAO;
-import QuizNQuestion.QuizQuestionDTO;
+import DAO.Quiz.QuizOptionDAO;
+import DAO.Quiz.QuizQuestionDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;

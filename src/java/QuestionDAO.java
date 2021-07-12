@@ -5,8 +5,8 @@
  */
 
 
+import DTO.Question.QuestionDTO;
 import utils.DBHelpers;
-import QuizNQuestion.QuestionDTO;
 import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.PreparedStatement;

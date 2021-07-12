@@ -1,4 +1,4 @@
-package group6.entity.lesson;
+package DTO.Lesson;
 
 import java.io.Serializable;
 

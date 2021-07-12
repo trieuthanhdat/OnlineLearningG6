@@ -3,10 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-import group6.entity.user.UserDAO;
-import group6.entity.user.UserDTO;
+import DAO.User.UserDAO;
+import DTO.User.UserDTO;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import javax.naming.NamingException;

@@ -5,11 +5,11 @@
  */
 package Servlet;
 
-import QuizNQuestion.QuizDAO;
-import QuizNQuestion.QuizDTO;
-import QuizNQuestion.UserAnswerDAO;
-import QuizNQuestion.UserAnswerDTO;
-import group6.entity.user.UserDTO;
+import DAO.Quiz.QuizDAO;
+import DAO.User.UserAnswerDAO;
+import DTO.Quiz.QuizDTO;
+import DTO.User.UserAnswerDTO;
+import DTO.User.UserDTO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;

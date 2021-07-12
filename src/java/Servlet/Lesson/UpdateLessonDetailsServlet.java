@@ -3,16 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package group6.controller;
+package Servlet.Lesson;
 
-import group6.entity.lesson.LessonDAO;
-import group6.entity.lesson.LessonDTO;
-import group6.entity.lesson.LessonDetailsDTO;
-import group6.entity.user.UserDTO;
+import DAO.Lesson.LessonDAO;
+import DTO.Lesson.LessonDTO;
+import DTO.Lesson.LessonDetailsDTO;
+import DTO.User.UserDTO;
 import java.io.IOException;
 import java.sql.SQLException;
 import javax.naming.NamingException;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;

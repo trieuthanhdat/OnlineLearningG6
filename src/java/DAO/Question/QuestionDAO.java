@@ -3,9 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package QuizNQuestion;
+package DAO.Question;
 
-import Utils.DBHelpers;
+import DTO.Question.QuestionDTO;
+import utils.DBHelpers;
 import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.PreparedStatement;

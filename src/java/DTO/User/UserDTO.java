@@ -1,4 +1,4 @@
-package group6.entity.user;
+package DTO.User;
 
 import java.io.Serializable;
 

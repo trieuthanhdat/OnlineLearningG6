@@ -3,13 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Servlet;
+package Servlet.Quiz;
 
-import QuizNQuestion.QuizDAO;
-import QuizNQuestion.QuizDTO;
-import QuizNQuestion.UserAnswerDAO;
-import QuizNQuestion.UserAnswerDTO;
-import User.UserDTO;
+import DAO.Quiz.QuizDAO;
+import DAO.User.UserAnswerDAO;
+import DTO.Quiz.QuizDTO;
+import DTO.User.UserAnswerDTO;
+import DTO.User.UserDTO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;

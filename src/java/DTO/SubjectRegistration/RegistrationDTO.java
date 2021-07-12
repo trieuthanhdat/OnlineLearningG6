@@ -1,4 +1,4 @@
-package group6.entity.registration;
+package DTO.SubjectRegistration;
 
 import java.io.Serializable;
 import java.sql.Date;

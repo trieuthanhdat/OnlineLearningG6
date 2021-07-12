@@ -1,4 +1,4 @@
-package group6.entity.subjectcategory;
+package DTO.Subject;
 
 import java.io.Serializable;
 

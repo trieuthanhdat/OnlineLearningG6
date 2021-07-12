@@ -3,8 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package khoalnm.controller;
+package Servlet.Sale;
 
+import DAO.Subject.SubjectDAO;
+import DAO.SubjectRegistration.MyRegistrationDAO;
+import DAO.SubjectRegistration.PackageDAO;
+import DTO.Subject.SubjectDTO;
+import DTO.SubjectRegistration.MyRegistrationDTO;
+import DTO.SubjectRegistration.PackageDTO;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -15,12 +21,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import khoalnm.registration.MyRegistrationDAO;
-import khoalnm.registration.MyRegistrationDTO;
-import khoalnm.registration.PackageDAO;
-import khoalnm.registration.PackageDTO;
-import khoalnm.registration.SubjectDAO;
-import khoalnm.registration.SubjectDTO;
 
 /**
  *

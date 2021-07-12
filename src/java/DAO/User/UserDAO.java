@@ -1,12 +1,13 @@
-package group6.entity.user;
+package DAO.User;
 
+import DTO.User.UserDTO;
 import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.naming.NamingException;
-import group6.utils.DBHelpers;
+import utils.DBHelpers;
 import java.util.ArrayList;
 import java.util.List;
 

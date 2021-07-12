@@ -4,6 +4,8 @@
  * and open the template in the editor.
  */
 
+import DAO.User.UserProfileDAO;
+import DTO.User.UserProfileDTO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
@@ -15,7 +17,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import khoalnm.registration.UserProfileDTO;
 
 /**
  *

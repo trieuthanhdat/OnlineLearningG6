@@ -1,6 +1,8 @@
-package group6.entity.lesson;
+package DAO.Lesson;
 
-import group6.utils.DBHelpers;
+import DTO.Lesson.LessonDTO;
+import DTO.Lesson.LessonDetailsDTO;
+import utils.DBHelpers;
 import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.PreparedStatement;

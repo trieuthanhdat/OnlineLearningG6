@@ -3,10 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package group6.controller;
+package Servlet.Subject;
 
-import group6.entity.subjectcategory.SubjectCategoryDAO;
-import group6.entity.subjectcategory.SubjectCategoryDTO;
+import DAO.Subject.SubjectCategoryDAO;
+import DAO.Subject.SubjectDAO;
+import DTO.Subject.SubjectCategoryDTO;
+import DTO.Subject.SubjectDTO;
+import DTO.User.UserDTO;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
@@ -18,9 +21,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import group6.entity.subject.SubjectDAO;
-import group6.entity.subject.SubjectDTO;
-import group6.entity.user.UserDTO;
 
 /**
  *

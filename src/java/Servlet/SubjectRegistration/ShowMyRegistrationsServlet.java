@@ -3,11 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package group6.controller;
+package Servlet.SubjectRegistration;
 
-import group6.entity.registration.RegistrationDAO;
-import group6.entity.registration.RegistrationDTO;
-import group6.entity.user.UserDTO;
+import DAO.SubjectRegistration.RegistrationDAO;
+import DTO.SubjectRegistration.RegistrationDTO;
+import DTO.User.UserDTO;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;

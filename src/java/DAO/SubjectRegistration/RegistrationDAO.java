@@ -1,6 +1,7 @@
-package group6.entity.registration;
+package DAO.SubjectRegistration;
 
-import group6.utils.DBHelpers;
+import DTO.SubjectRegistration.RegistrationDTO;
+import utils.DBHelpers;
 import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.Date;

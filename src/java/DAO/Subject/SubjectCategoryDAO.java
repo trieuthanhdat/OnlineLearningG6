@@ -1,5 +1,6 @@
-package group6.entity.subjectcategory;
+package DAO.Subject;
 
+import DTO.Subject.SubjectCategoryDTO;
 import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -8,7 +9,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.naming.NamingException;
-import group6.utils.DBHelpers;
+import utils.DBHelpers;
 
 /**
  *
