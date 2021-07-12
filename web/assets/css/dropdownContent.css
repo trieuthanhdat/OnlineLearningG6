@@ -1,0 +1,305 @@
+:root {
+  --red-main: #ff6f61;
+  --black: #000000;
+  --black-gray: 222731;
+  --fullwidth: 100%;
+}
+.menu {
+  width: 100%;
+  border-radius: 8px;
+  overflow: hidden;
+}
+section {
+  padding: 1%;
+}
+
+.item {
+  overflow: hidden;
+}
+.item a {
+  border: 1px solid;
+  width: 100%;
+  color: var(--black);
+  background-color: #f6f7f6;
+}
+
+.btn {
+  display: block;
+  padding: 16px 20px;
+  background: #17c0eb;
+  color: white;
+  position: relative;
+}
+
+.btn::before {
+  content: "";
+  position: absolute;
+  width: 14px;
+  height: 14px;
+
+  left: 20px;
+  bottom: -7px;
+  transform: rotate(45deg);
+}
+
+.btn i {
+  margin-right: 10px;
+}
+
+.smenu {
+  overflow: hidden;
+  transition: max-height 0.3s;
+  max-height: 0;
+}
+
+.smenu a {
+  background: rgb(207, 205, 205);
+  display: block;
+  padding: 16px 26px;
+  color: var(--black);
+  margin: 4px 0;
+  position: relative;
+}
+
+.smenu a::before {
+  content: "";
+  position: relative;
+  width: 6px;
+  height: 100%;
+  left: 0;
+  top: 0;
+  transition: 0.3s;
+  opacity: 0;
+}
+
+.smenu a:hover::before {
+  opacity: 1;
+}
+
+.item:target .smenu {
+  max-height: 10em;
+}
+.trending-item .ti-pic {
+  float: left;
+  margin-right: 10px;
+}
+/* dropdown lessons in lectures  */
+.dropdown-content-lessons {
+  position: fixed;
+  right: 0;
+  top: 30%;
+  z-index: 1;
+  /* background: white; */
+  width: 0;
+}
+.col-lg-3.dropdown-content-lessons {
+
+  max-width: 25.5%;
+  width: 100%;
+  position: absolute;
+  float: right;
+  right: 0;
+  transition: all 0.3s linear;
+  top: 0;
+  height: 227%;
+  background: black;
+  overflow: auto;
+  border-left: 2px solid white;
+  z-index: 0;
+}
+
+.menu1 {
+  position: relative;
+}
+.menu1 li,
+.menu1 .menu button {
+  width: 100% !important;
+}
+.lesson-content {
+  padding: 0 !important;
+}
+
+/* button arrow */
+.btn {
+  /* just for this demo. */
+  background-color: var(--black-gray);
+  margin-top: 5px;
+}
+
+.btn-arrow-right,
+.btn-arrow-left {
+  position: relative;
+  padding-left: 18px;
+  padding-right: 18px;
+}
+
+.btn-arrow-right {
+  padding-left: 36px;
+}
+
+.btn-arrow-left {
+  padding-right: 36px;
+  transform: translateX(-20px);
+}
+.btn-arrow-left:hover {
+  transform: translateX(-100px);
+}
+.btn-arrow-right:before,
+.btn-arrow-right:after,
+.btn-arrow-left:before,
+.btn-arrow-left:after {
+  /* make two squares (before and after), looking similar to the button */
+
+  content: "";
+  position: absolute;
+  top: 5px;
+  /* move it down because of rounded corners */
+
+  width: 22px;
+  /* same as height */
+
+  height: 22px;
+  /* button_outer_height / sqrt(2) */
+
+  background: inherit;
+  /* use parent background */
+
+  border: inherit;
+  /* use parent border */
+
+  border-left-color: transparent;
+  /* hide left border */
+
+  border-bottom-color: transparent;
+  /* hide bottom border */
+
+  border-radius: 0px 4px 0px 0px;
+  /* round arrow corner, the shorthand property doesn't accept "inherit" so it is set to 4px */
+
+  -webkit-border-radius: 0px 4px 0px 0px;
+  -moz-border-radius: 0px 4px 0px 0px;
+}
+
+.btn-arrow-right:before,
+.btn-arrow-right:after {
+  transform: rotate(45deg);
+  /* rotate right arrow squares 45 deg to point right */
+
+  -webkit-transform: rotate(45deg);
+  -moz-transform: rotate(45deg);
+  -o-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+}
+
+.btn-arrow-left:before,
+.btn-arrow-left:after {
+  transform: rotate(225deg);
+  /* rotate left arrow squares 225 deg to point left */
+
+  -webkit-transform: rotate(225deg);
+  -moz-transform: rotate(225deg);
+  -o-transform: rotate(225deg);
+  -ms-transform: rotate(225deg);
+}
+
+.btn-arrow-right:before,
+.btn-arrow-left:before {
+  /* align the "before" square to the left */
+
+  left: -11px;
+}
+
+.btn-arrow-right:after,
+.btn-arrow-left:after {
+  /* align the "after" square to the right */
+
+  right: -11px;
+}
+
+.btn-arrow-right:after,
+.btn-arrow-left:before {
+  /* bring arrow pointers to front */
+
+  z-index: 1;
+}
+
+.btn-arrow-right:before,
+.btn-arrow-left:after {
+  /* hide arrow tails background */
+
+  background-color: white;
+}
+/*========== Content tabs============ */
+.lesson-description {
+  display: flex;
+  align-items: baseline;
+  align-content: stretch;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  flex-direction: column;
+}
+.lesson-description a {
+  color: black;
+  font-size: larger;
+  padding: 10%;
+  width: 100%;
+  text-align: center;
+}
+li .active {
+  box-shadow: 0.5px 2px 1px #d4cdcd;
+  display: block;
+}
+.lesson-description ul {
+  background: none !important;
+  width: 100%;
+  padding: 0 10% 0px 10%;
+}
+.lesson-description li {
+  width: 12%;
+}
+.form-control {
+  height: auto !important;
+}
+.tab-content .btn {
+  margin: inherit !important;
+}
+.tab-content {
+  width: 100%;
+  padding: 1% 10% 0 10%;
+  min-height: 500px;
+}
+/* menu1 content dropdown */
+.menu1 .btn {
+  background: #f6f7f6;
+  color: black;
+}
+.menu1 .active {
+  max-height: fit-content;
+  display: block;
+}
+.menu1 a {
+  padding: 10px;
+  width: 100%;
+}
+.closebtn {
+  position: relative;
+  font-size: 0;
+  display: flex;
+  justify-content: flex-end;
+}
+.dropdown-content-lessons .middle h2,
+.dropdown-content-lessons .middle p {
+  color: white;
+}
+.anchor-content-tab {
+  display: block;
+}
+
+@media (max-width: 768.96px) {
+  .anchor-content-tab {
+    display: none;
+  }
+  .dropdown-content-lessons{
+    width: 100%;
+  }
+}
