@@ -66,19 +66,19 @@ public class ShowUpdateLessonFormServlet extends HttpServlet {
                             }
                         }
                         
-                        if (existLessonResult) {
-                            QuizDAO quizDAO = new QuizDAO();
-                            List<QuizDTO> quizzes = quizDAO.getQuizzesBySubjectID(currSubID);
-                            List<LessonDTO> topics = lessonDAO.getTopicsBySubjectID(currSubID);
-                            LessonDetailsDTO details = lessonDAO.getLessonDetailsByID(currLessonID);
-                            LessonDTO currLesson = lessonDAO.getLessonByID(currLessonID);
-                            currLesson.setDetails(details);
-                            
-                            request.setAttribute("QUIZZES_LIST", quizzes);
-                            request.setAttribute("TOPICS_LIST", topics);
-                            request.setAttribute("CURRENT_LESSON", currLesson);
-                            url = RESULT_PAGE;
-                        }
+//                        if (existLessonResult) {
+//                            QuizDAO quizDAO = new QuizDAO();
+//                            List<QuizDTO> quizzes = quizDAO.getQuizzesBySubjectID(currSubID);
+//                            List<LessonDTO> topics = lessonDAO.getTopicsBySubjectID(currSubID);
+//                            LessonDetailsDTO details = lessonDAO.getLessonDetailsByID(currLessonID);
+//                            LessonDTO currLesson = lessonDAO.getLessonByID(currLessonID);
+//                            currLesson.setDetails(details);
+//                            
+//                            request.setAttribute("QUIZZES_LIST", quizzes);
+//                            request.setAttribute("TOPICS_LIST", topics);
+//                            request.setAttribute("CURRENT_LESSON", currLesson);
+//                            url = RESULT_PAGE;
+//                        }
                     }
                 }
             }

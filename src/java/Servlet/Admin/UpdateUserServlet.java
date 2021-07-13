@@ -45,26 +45,26 @@ private final String USER_LIST="user.jsp";
         if(selectStatus.equals("true")){
             status= true;
         }
-        try { 
-            UserDAO dao = new UserDAO();
-            boolean result = dao.updateUser(email, role, status);
-            if(result){
-                //update xong thì load lại page vua cap nhat, thieu cai nay thì empty list null => no result match
-                UserDAO userdao = new UserDAO();
-                userdao.getUser();
-                ArrayList<UserDTO> userList = userdao.getUserList();
-                request.setAttribute("userlist", userList);
-                url = USER_LIST;
-            }
-        }catch(SQLException ex){
-            log("Check UpdateUserServlet SQL Exception - "+ex);
-        }catch(NamingException ex){
-            log("Check UpdateUserServlet NamingException - "+ex);
-        }
-        finally{
-            RequestDispatcher rd=request.getRequestDispatcher(url);
-            rd.forward(request, response); 
-        }
+//        try { 
+//            UserDAO dao = new UserDAO();
+//            boolean result = dao.updateUser(email, role, status);
+//            if(result){
+//                //update xong thì load lại page vua cap nhat, thieu cai nay thì empty list null => no result match
+//                UserDAO userdao = new UserDAO();
+//                userdao.getUser();
+//                ArrayList<UserDTO> userList = userdao.getUserList();
+//                request.setAttribute("userlist", userList);
+//                url = USER_LIST;
+//            }
+//        }catch(SQLException ex){
+//            log("Check UpdateUserServlet SQL Exception - "+ex);
+//        }catch(NamingException ex){
+//            log("Check UpdateUserServlet NamingException - "+ex);
+//        }
+//        finally{
+//            RequestDispatcher rd=request.getRequestDispatcher(url);
+//            rd.forward(request, response); 
+//        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

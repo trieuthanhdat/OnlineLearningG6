@@ -12,16 +12,10 @@ public class DBHelpers implements Serializable {
 
     public static Connection makeConnection()
             throws NamingException, SQLException {
-        Connection con = null;
-        try {
-            Context context = new InitialContext(); //get current OS
-            Context tomcatContext = (Context) context.lookup("java:comp/env"); //get Tomcat OS
-            DataSource ds = (DataSource) tomcatContext.lookup("OLS");
-            con = ds.getConnection();
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        return con;
+        Context context = new InitialContext(); //get current OS
+        Context tomcatContext = (Context) context.lookup("java:comp/env"); //get Tomcat OS
+        DataSource ds = (DataSource) tomcatContext.lookup("OLS");
+        Connection con = ds.getConnection();
+        return con;       
     }
-
 }

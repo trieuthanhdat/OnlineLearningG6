@@ -44,22 +44,16 @@ public class LoginServlet extends HttpServlet {
         try {
             String email = request.getParameter("txtEmail");
             String password = request.getParameter("txtPassword");
-            log(email);
-            log(password);
             UserDAO dao = new UserDAO();
             UserDTO result = dao.checkLogin2(email, password);
-            log(result.toString());
+            log("Login: " + email + " - " + password + " - " + result);
             if (result != null) {
-                url = LOGGED_IN_PAGE;
-                log(url);
+                url = LOGGED_IN_PAGE;               
                 HttpSession session = request.getSession();
                 session.setAttribute("CURRENT_USER", result);
-            }
-            log(url);
-        } catch (NamingException ex) {
-            log("NamingException: " + ex.getMessage());
-        } catch (SQLException ex) {
-            log("SQLException: " + ex.getMessage());
+            }            
+        } catch (NamingException | SQLException ex) {
+            log(ex.toString());        
         } finally {
             response.sendRedirect(url);
         }

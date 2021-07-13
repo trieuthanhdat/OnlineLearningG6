@@ -117,11 +117,14 @@ public class UserDAO implements Serializable {
             con = DBHelpers.makeConnection();
             String sql = "SELECT UserID, Role, Fullname, Status "
                     + "FROM Users "
-                    + "WHERE Email = '"+email+"' AND Password = '"+password+"'";
+                    + "WHERE Email = ? AND Password = ?";
 
             if (con != null) {
                 stm = con.prepareStatement(sql);
-                rs = stm.executeQuery();
+                stm.setString(1, email);
+                stm.setString(2, password);
+                
+                rs = stm.executeQuery();                
                 if (rs.next()) {
                     String userID = rs.getString("UserID");
                     String role = rs.getString("Role");

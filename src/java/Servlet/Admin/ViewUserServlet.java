@@ -37,20 +37,20 @@ private final String USER_PAGE="user.jsp";
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        String url = USER_PAGE;
-        try  {
-            UserDAO userdao = new UserDAO();
-            userdao.getUser();
-            ArrayList<UserDTO> userList = userdao.getUserList();
-            request.setAttribute("userlist", userList);
-        }catch(SQLException ex){
-            log("Check ViewUserServlet SQL Exception - "+ex);
-        }catch(NamingException ex){
-            log("Check ViewUserServlet Naming Exception - "+ex);
-        }finally{
-            RequestDispatcher rd = request.getRequestDispatcher(url);
-            rd.forward(request, response);
-        }
+//        String url = USER_PAGE;
+//        try  {
+//            UserDAO userdao = new UserDAO();
+//            userdao.getUser();
+//            ArrayList<UserDTO> userList = userdao.getUserList();
+//            request.setAttribute("userlist", userList);
+//        }catch(SQLException ex){
+//            log("Check ViewUserServlet SQL Exception - "+ex);
+//        }catch(NamingException ex){
+//            log("Check ViewUserServlet Naming Exception - "+ex);
+//        }finally{
+//            RequestDispatcher rd = request.getRequestDispatcher(url);
+//            rd.forward(request, response);
+//        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

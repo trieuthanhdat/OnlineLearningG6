@@ -66,17 +66,17 @@ public class ShowNewLessonFormServlet extends HttpServlet {
                         }
                     }
                     
-                    if (ownResult) {
-                        QuizDAO quizDAO = new QuizDAO();
-                        List<QuizDTO> quizzes = quizDAO.getQuizzesBySubjectID(currSubID);
-                        LessonDAO lessonDAO = new LessonDAO();
-                        List<LessonDTO> topics = lessonDAO.getTopicsBySubjectID(currSubID);                    
-                    
-                        request.setAttribute("QUIZZES_LIST", quizzes);
-                        request.setAttribute("TOPICS_LIST", topics);
-                        request.setAttribute("CURRENT_SUBJECT_ID", currSubID);
-                        url = NEW_LESSON_PAGE;
-                    }                    
+//                    if (ownResult) {
+//                        QuizDAO quizDAO = new QuizDAO();
+//                        List<QuizDTO> quizzes = quizDAO.getQuizzesBySubjectID(currSubID);
+//                        LessonDAO lessonDAO = new LessonDAO();
+//                        List<LessonDTO> topics = lessonDAO.getTopicsBySubjectID(currSubID);                    
+//                    
+//                        request.setAttribute("QUIZZES_LIST", quizzes);
+//                        request.setAttribute("TOPICS_LIST", topics);
+//                        request.setAttribute("CURRENT_SUBJECT_ID", currSubID);
+//                        url = NEW_LESSON_PAGE;
+//                    }                    
                 }
             }
         } catch (NamingException | SQLException ex) {

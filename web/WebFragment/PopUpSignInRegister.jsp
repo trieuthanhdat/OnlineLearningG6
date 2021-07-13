@@ -27,7 +27,7 @@
           <input type="submit" id="submit" value="Login" />
         </form>
 
-        <form action="#" class="register-form">
+        <form action="Register" class="register-form">
           <label for="email-register">Email:</label>
           <input type="text" id="email-register" />
           <label for="firstname-register" style="padding-left: 100px; width:40%;">first-name:</label>

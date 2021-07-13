@@ -39,31 +39,31 @@ public class SearchUserEmailServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         String searchValue = request.getParameter("txtSearchEmail");
         String url = SEARCH_PAGE;
-        try {
-
-            UserDAO dao = new UserDAO();
-            if (searchValue.trim().length() > 0) {//neu search co gia tri thi xu li
-                dao.searchUserxEmail(searchValue);//lay user theo user email
-                ArrayList<UserDTO> result = dao.getUserList();//search co the tra nhieu ket qua
-                request.setAttribute("SEARCHRESULT", result);
-                request.setAttribute("SearchField", searchValue);//cai nay de gan search value vao search
-                url = SEARCH_PAGE;
-
-            } else if (searchValue.trim().length() == 0) {//neu search value null thì show all list
-                dao.searchUserEmail(searchValue);//lay full list user theo email
-                ArrayList<UserDTO> result = dao.getUserList();
-                request.setAttribute("SEARCHRESULT", result);
-                url = SEARCH_PAGE;
-
-            }
-        } catch (SQLException ex) {
-            log("Check SearchUserEmailServlet SQLException - " + ex.getMessage());
-        } catch (NamingException ne) {
-            log("Check SearchUserEmailServlet NamingException - " + ne.getMessage());
-        } finally {
-            RequestDispatcher rd = request.getRequestDispatcher(url);
-            rd.forward(request, response);
-        }
+//        try {
+//
+//            UserDAO dao = new UserDAO();
+//            if (searchValue.trim().length() > 0) {//neu search co gia tri thi xu li
+//                dao.searchUserxEmail(searchValue);//lay user theo user email
+//                ArrayList<UserDTO> result = dao.getUserList();//search co the tra nhieu ket qua
+//                request.setAttribute("SEARCHRESULT", result);
+//                request.setAttribute("SearchField", searchValue);//cai nay de gan search value vao search
+//                url = SEARCH_PAGE;
+//
+//            } else if (searchValue.trim().length() == 0) {//neu search value null thì show all list
+//                dao.searchUserEmail(searchValue);//lay full list user theo email
+//                ArrayList<UserDTO> result = dao.getUserList();
+//                request.setAttribute("SEARCHRESULT", result);
+//                url = SEARCH_PAGE;
+//
+//            }
+//        } catch (SQLException ex) {
+//            log("Check SearchUserEmailServlet SQLException - " + ex.getMessage());
+//        } catch (NamingException ne) {
+//            log("Check SearchUserEmailServlet NamingException - " + ne.getMessage());
+//        } finally {
+//            RequestDispatcher rd = request.getRequestDispatcher(url);
+//            rd.forward(request, response);
+//        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
