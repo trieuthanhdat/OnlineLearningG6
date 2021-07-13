@@ -1,0 +1,7 @@
+=ShowHomePageServlet
+WelcomePage=WelcomePage.jsp
+HomePage=HomePage.jsp
+Login=LoginServlet
+LoginServlet=HomePage.jsp
+Logout=LogoutServlet
+SinglePage=SinglePage.jsp
