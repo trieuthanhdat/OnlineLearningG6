@@ -6,11 +6,12 @@
 package Servlet.Subject;
 
 import DAO.Subject.SubjectDAO;
+import DAO.SubjectRegistration.PackageDAO;
 import DTO.Subject.SubjectDTO;
-import DTO.Subject.SubjectDetailsDTO;
-import DTO.User.UserDTO;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.SQLException;
+import java.util.List;
 import javax.naming.NamingException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -18,17 +19,16 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 /**
  *
  * @author ASUS
  */
-@WebServlet(name = "AddNewSubjectServlet", urlPatterns = {"/AddNewSubjectServlet"})
-public class AddNewSubjectServlet extends HttpServlet {
-    
-    private final String ERROR_PAGE = "ShowNewSubjectFormServlet";
-    private final String RESULT_PAGE = "ShowSubjectsListServlet";
+@WebServlet(name = "ShowSearchCoursesServlet", urlPatterns = {"/ShowSearchCoursesServlet"})
+public class ShowSearchCoursesServlet extends HttpServlet {
+
+    private final String WELCOME_PAGE = "WelcomePage";    
+    private final String SEARCH_COURSES_PAGE = "SearchCourses.jsp";    
     
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -43,41 +43,41 @@ public class AddNewSubjectServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         
-        String url = ERROR_PAGE;
+        String url = WELCOME_PAGE;
+        
         try {
-            HttpSession session = request.getSession(false);
-            if (session != null) {
-                UserDTO currUser = (UserDTO)session.getAttribute("CURRENT_USER");
-                if (currUser != null & currUser.getRole().equals("admin")) {
-                    int subjectID = 0;
-                    String title = request.getParameter("txtSubjectTitle");
-                    int categoryID = Integer.parseInt(request.getParameter("txtCategoryID"));
-                    int numOfLessons = 0;
-                    String ownerID = request.getParameter("txtOwnerID");
-                    String thumbnailLink = request.getParameter("txtThumbnailLink");
-                    String tagLine = request.getParameter("txtTagLine");
-                    String briefInfo = request.getParameter("txtBriefInfo");
-                    String description = request.getParameter("txtDescription");
-                    boolean status = false;
-                    
-                    SubjectDetailsDTO newDetails = new SubjectDetailsDTO(tagLine, description);
-                    SubjectDTO newSubject = new SubjectDTO(subjectID, categoryID, title, numOfLessons, thumbnailLink, ownerID, briefInfo, newDetails, null, status, false);
-                    SubjectDAO dao = new SubjectDAO();
-                    
-                    boolean result1 = dao.addNewSubject(newSubject);
-                    boolean result2 = dao.addNewSubjectDetails(newSubject);
-                    if (result1 && result2) {
-                        url = RESULT_PAGE;
-                        log("AddNewSubjectServlet: Create new subject " + newSubject.getSubjectID() + " successfully!");
-                        response.sendRedirect(url);
-                    }
-                }
+            String searchCourseName = request.getParameter("txtCourseName");            
+            if (searchCourseName == null) 
+                searchCourseName = "";
+            else searchCourseName = searchCourseName.trim();
+            
+            String txtCategoryID = request.getParameter("txtCategoryID");
+            int categoryID = 0;
+            if (txtCategoryID != null) {
+                categoryID = Integer.parseInt(txtCategoryID);
             }
-        } catch (NumberFormatException | NamingException | SQLException ex) {
+            
+            SubjectDAO subDAO = new SubjectDAO();
+            List<SubjectDTO> searchList = subDAO.searchCourse(searchCourseName, categoryID);            
+            
+            PackageDAO packageDAO = new PackageDAO();
+            for (SubjectDTO sub : searchList) {
+                packageDAO.getPackagesBySubjectID(sub.getSubjectID());
+                sub.setPackages(packageDAO.getPackageList());
+            }
+            request.setAttribute("SEARCH_COURSES_LIST", searchList);
+            url = SEARCH_COURSES_PAGE;
+            
+        } catch (NamingException | SQLException ex) {
             log(ex.toString());
-            RequestDispatcher rd = request.getRequestDispatcher(url);
-            rd.forward(request, response);
-        } 
+        } finally {
+            if (url.equals(WELCOME_PAGE)) {
+                response.sendRedirect(url);
+            } else {
+                RequestDispatcher rd = request.getRequestDispatcher(url);
+                rd.forward(request, response);
+            }
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

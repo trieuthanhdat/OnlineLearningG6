@@ -107,11 +107,11 @@ public class DispatchFilter implements Filter {
         HttpServletRequest req = (HttpServletRequest) request;
         String uri = req.getRequestURI();
         String url = null;
-        log("URI: " + uri);
+        //log("URI: " + uri);
         
         try {
-            //file trong thư mục js, css, img không cần đi qua filter
-            if (uri.contains("/js") || uri.contains("/css") || uri.contains("/img")) {
+            //file trong thư mục lib, assets không cần đi qua filter
+            if (uri.contains("/lib") || uri.contains("/assets")) {
                 chain.doFilter(request,response);
                 return;
             }   
@@ -129,15 +129,13 @@ public class DispatchFilter implements Filter {
             } else {
                 for (String key : conversionMap.keySet()) {
                     if (key.equals(resource)) {
-                        url = conversionMap.get(key);
-                        log("filter: "+url);
+                        url = conversionMap.get(key);                        
                     }
                 }
             }
             // Nếu không thì dispatch tới error page.
             if (url == null) {
-                url = ERROR_PAGE;
-                 log("filter: "+url);
+                url = ERROR_PAGE;                 
             }            
             
             log("Current Resource: " + url);

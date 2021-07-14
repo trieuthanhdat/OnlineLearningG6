@@ -25,7 +25,7 @@ import javax.servlet.http.HttpSession;
 public class LoginServlet extends HttpServlet {
 
     private final String LOGGED_IN_PAGE = "HomePage";
-    private final String INVALID_PAGE = "ErrorPage";
+    private final String INVALID_PAGE = "WelcomePage";
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -44,14 +44,11 @@ public class LoginServlet extends HttpServlet {
         try {
             String email = request.getParameter("txtEmail");
             String password = request.getParameter("txtPassword");
-            log(email);
-            log(password);
+            log("LoginServlet: " + email + " - " + password);            
             UserDAO dao = new UserDAO();
-            UserDTO result = dao.checkLogin(email, password);
-            log(result.toString());
+            UserDTO result = dao.checkLogin(email, password);            
             if (result != null) {
-                url = LOGGED_IN_PAGE;
-                log(url);
+                url = LOGGED_IN_PAGE;                
                 HttpSession session = request.getSession();
                 session.setAttribute("CURRENT_USER", result);
             }

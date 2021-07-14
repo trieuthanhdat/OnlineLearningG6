@@ -1,3 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Context path="/OnlineLearningPages"/>
+<Context path="/OnlineLearningPages">
+<!--    <Resource name="OLS" auth="Container" type="javax.sql.DataSource"
+            driverClassName="com.microsoft.sqlserver.jdbc.SQLServerDriver"
+            url="jdbc:sqlserver://localhost:1433;databaseName=OnlineLearning"
+            username="admin" password="admin"/>-->
+</Context>
 

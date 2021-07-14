@@ -3,33 +3,25 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Servlet.Subject;
+package Servlet.System;
 
-import DAO.Subject.SubjectDAO;
-import DTO.Subject.SubjectDTO;
-import DTO.Subject.SubjectDetailsDTO;
-import DTO.User.UserDTO;
 import java.io.IOException;
-import java.sql.SQLException;
-import javax.naming.NamingException;
-import javax.servlet.RequestDispatcher;
+import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 /**
  *
  * @author ASUS
  */
-@WebServlet(name = "UpdateSubjectDetailsServlet", urlPatterns = {"/UpdateSubjectDetailsServlet"})
-public class UpdateSubjectDetailsServlet extends HttpServlet {
+@WebServlet(name = "RedirectWelcomePageServlet", urlPatterns = {"/RedirectWelcomePageServlet"})
+public class RedirectWelcomePageServlet extends HttpServlet {
 
-    private final String ERROR_PAGE = "error.html";
-    private final String RESULT_PAGE = "ShowUpdateSubjectFormServlet";
-
+    private final String WELCOME_PAGE = "WelcomePage";
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -42,37 +34,9 @@ public class UpdateSubjectDetailsServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-
-        String url = ERROR_PAGE;
-
-        try {
-            HttpSession session = request.getSession(false);
-            if (session != null) {
-                UserDTO currUser = (UserDTO) session.getAttribute("CURRENT_USER");
-                if (currUser != null) {
-                    int subID = Integer.parseInt(request.getParameter("txtSubjectID"));
-                    String title = request.getParameter("txtSubjectTitle");
-                    int categoryID = Integer.parseInt(request.getParameter("txtCategoryID"));
-                    String thumbnail = request.getParameter("txtThumbnailLink");
-                    String tagLine = request.getParameter("txtTagLine");
-                    String briefInfo = request.getParameter("txtBriefInfo");
-                    String description = request.getParameter("txtDescription");
-
-                    SubjectDetailsDTO subDetails = new SubjectDetailsDTO(tagLine, description);
-                    SubjectDTO sub = new SubjectDTO(subID, categoryID, title, 0, thumbnail, "", briefInfo, subDetails, null, true, false);
-
-                    SubjectDAO dao = new SubjectDAO();
-                    if (dao.updateSubject(sub)) {
-                        url = RESULT_PAGE + "?txtSubjectID=" + subID;
-                    }
-                }
-            }
-        } catch (NamingException | SQLException ex) {
-            log(ex.toString());
-        } finally {
-            RequestDispatcher rd = request.getRequestDispatcher(url);
-            rd.forward(request, response);
-        }
+        
+        String url = WELCOME_PAGE;
+        response.sendRedirect(url);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

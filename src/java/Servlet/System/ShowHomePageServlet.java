@@ -8,12 +8,14 @@ package Servlet.System;
 import DAO.Subject.SubjectDAO;
 import DAO.User.UserDAO;
 import DTO.Subject.SubjectDTO;
+import DTO.User.UserDTO;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.naming.NamingException;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -28,7 +30,10 @@ import javax.servlet.http.HttpSession;
 @WebServlet(name = "ShowHomePageServlet", urlPatterns = {"/ShowHomePageServlet"})
 public class ShowHomePageServlet extends HttpServlet {
 
-    private final String HOME_PAGE = "WelcomePage";
+    private final String WELCOME_PAGE = "WelcomePage";
+    private final String HOME_PAGE = "HomePage.jsp";
+    private final String DASHBOARD_PAGE = "";
+    private final String ERROR_PAGE = "ErrorPage";
     
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -40,22 +45,30 @@ public class ShowHomePageServlet extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException, NamingException, SQLException {
+            throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         
-        SubjectDAO subdao = new SubjectDAO();
-        try{
-        HttpSession session = request.getSession();
-        ArrayList<SubjectDTO> subList = subdao.getSubjectList();
-        if(subList != null){
-            session.setAttribute("SUBJECT_LIST", subList);
-            
+        String url = WELCOME_PAGE;
+        
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            UserDTO currUser = (UserDTO) session.getAttribute("CURRENT_USER");
+            if (currUser != null) {
+                if (currUser.getRole().equals("student")) {
+                    // slides, posts, courses
+                    url = HOME_PAGE;
+                } else {
+                    // to Dashboard
+                }
             }
-        }catch(Exception ex){
-            ex.printStackTrace();
         }
-        String url = HOME_PAGE;
-        response.sendRedirect(url);
+        
+        if (url.equals(HOME_PAGE)) {
+            RequestDispatcher rd = request.getRequestDispatcher(url);
+            rd.forward(request, response);
+        } else {
+            response.sendRedirect(url);
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -70,13 +83,8 @@ public class ShowHomePageServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        try {
-            processRequest(request, response);
-        } catch (NamingException ex) {
-            Logger.getLogger(ShowHomePageServlet.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
-            Logger.getLogger(ShowHomePageServlet.class.getName()).log(Level.SEVERE, null, ex);
-        }
+
+            processRequest(request, response);  
     }
 
     /**
@@ -90,13 +98,8 @@ public class ShowHomePageServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        try {
+        
             processRequest(request, response);
-        } catch (NamingException ex) {
-            Logger.getLogger(ShowHomePageServlet.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
-            Logger.getLogger(ShowHomePageServlet.class.getName()).log(Level.SEVERE, null, ex);
-        }
     }
 
     /**

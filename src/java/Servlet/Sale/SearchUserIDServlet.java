@@ -14,6 +14,7 @@ import DTO.SubjectRegistration.PackageDTO;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 import javax.naming.NamingException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -62,12 +63,12 @@ public class SearchUserIDServlet extends HttpServlet {
             //Get Subject List to track subject name on jsp
             SubjectDAO subdao = new SubjectDAO();
             subdao.getAllSubjects();
-            ArrayList<SubjectDTO> subjectlist = subdao.getSubjectList();
+            List<SubjectDTO> subjectlist = subdao.getSubjectsList();
             request.setAttribute("subjectlist", subjectlist);
             //Get PAckage List\ to track package id on jsp
             PackageDAO pkgdao = new PackageDAO();
             pkgdao.getPackage();
-            ArrayList<PackageDTO> packagelist = pkgdao.getPackageList();
+            List<PackageDTO> packagelist = pkgdao.getPackageList();
             request.setAttribute("packagelist", packagelist);
             if (subjectlist == null) {
                 log("Search user id servlet subject list null");

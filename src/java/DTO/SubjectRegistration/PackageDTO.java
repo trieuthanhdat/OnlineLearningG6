@@ -14,6 +14,7 @@ import java.sql.Date;
  */
 public class PackageDTO implements Serializable{
     private int packageID;
+    private int subjectID;
     private String name;
     private Date accessduration;
     private boolean status;
@@ -24,15 +25,16 @@ public class PackageDTO implements Serializable{
     public PackageDTO() {
     }
 
-    public PackageDTO(int packageID, String name, Date accessduration, boolean status, float listPrice, float salePrice, String description) {
+    public PackageDTO(int packageID, int subjectID, String name, Date accessduration, boolean status, float listPrice, float salePrice, String description) {
         this.packageID = packageID;
+        this.subjectID = subjectID;
         this.name = name;
         this.accessduration = accessduration;
         this.status = status;
         this.listPrice = listPrice;
         this.salePrice = salePrice;
         this.description = description;
-    }
+    }   
 
     /**
      * @return the packageID
@@ -131,6 +133,18 @@ public class PackageDTO implements Serializable{
     public void setDescription(String description) {
         this.description = description;
     }
-    
-    
+
+    /**
+     * @return the subjectID
+     */
+    public int getSubjectID() {
+        return subjectID;
+    }
+
+    /**
+     * @param subjectID the subjectID to set
+     */
+    public void setSubjectID(int subjectID) {
+        this.subjectID = subjectID;
+    }
 }

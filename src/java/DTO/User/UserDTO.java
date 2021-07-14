@@ -10,7 +10,8 @@ public class UserDTO implements Serializable {
     private String fullName;
     private String password;
     private boolean status;
-    private Date createdate;
+    private Date createdate;    
+    
     public UserDTO() {
     }
 

@@ -1,6 +1,8 @@
 package DTO.Subject;
 
+import DTO.SubjectRegistration.PackageDTO;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  *
@@ -15,12 +17,27 @@ public class SubjectDTO implements Serializable {
     private String ownerID;
     private String briefInfo;
     private SubjectDetailsDTO details;
+    private List<PackageDTO> packages;
     private boolean status;
     private boolean featureFlag;
 
     public SubjectDTO() {
     }
 
+    public SubjectDTO(int subjectID, int subjectCategoryID, String title, int numOfLessons, String thumbnail, String ownerID, String briefInfo, SubjectDetailsDTO details, List<PackageDTO> packages, boolean status, boolean featureFlag) {
+        this.subjectID = subjectID;
+        this.subjectCategoryID = subjectCategoryID;
+        this.title = title;
+        this.numOfLessons = numOfLessons;
+        this.thumbnail = thumbnail;
+        this.ownerID = ownerID;
+        this.briefInfo = briefInfo;
+        this.details = details;
+        this.packages = packages;
+        this.status = status;
+        this.featureFlag = featureFlag;
+    }   
+    
     public int getSubjectID() {
         return subjectID;
     }
@@ -99,20 +116,14 @@ public class SubjectDTO implements Serializable {
 
     public void setFeatureFlag(boolean featureFlag) {
         this.featureFlag = featureFlag;
+    }    
+
+    public List<PackageDTO> getPackages() {
+        return packages;
     }
 
-    public SubjectDTO(int subjectID, int subjectCategoryID, String title, int numOfLessons, String thumbnail, String ownerID, String briefInfo, SubjectDetailsDTO details, boolean status, boolean featureFlag) {
-        this.subjectID = subjectID;
-        this.subjectCategoryID = subjectCategoryID;
-        this.title = title;
-        this.numOfLessons = numOfLessons;
-        this.thumbnail = thumbnail;
-        this.ownerID = ownerID;
-        this.briefInfo = briefInfo;
-        this.details = details;
-        this.status = status;
-        this.featureFlag = featureFlag;
-    }
-
+    public void setPackages(List<PackageDTO> packages) {
+        this.packages = packages;
+    }        
 }
 

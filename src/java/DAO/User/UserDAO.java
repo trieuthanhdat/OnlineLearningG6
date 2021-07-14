@@ -28,14 +28,8 @@ public class UserDAO implements Serializable {
         if (con != null) {
             con.close();
         }
-    }
-//    public UserDAO(){
-//        
-//    }
+    }    
 
-//    public UserDAO()throws NamingException, SQLException {
-//        getAllUsers();
-//    }
     private List<UserDTO> userList = new ArrayList<>();
 
     public List<UserDTO> getUserList() {
@@ -69,9 +63,34 @@ public class UserDAO implements Serializable {
         return "";
     }
 
-    public List<UserDTO> getAllExperts() {
-        return null;
+    public List<UserDTO> getAllExperts() 
+            throws NamingException, SQLException {
+        List<UserDTO> resultList = new ArrayList<>();
+        try {
+            con = DBHelpers.makeConnection();
+            if (con != null) {
+                String sql = "SELECT Email, UserID, Fullname, Password, CreateDate, Status "
+                       + "FROM Users "
+                       + "WHERE Role = ?";
+                stm = con.prepareStatement(sql);
+                stm.setString(1, "expert");
+                rs = stm.executeQuery();
+                while (rs.next()) {
+                    String email = rs.getString("Email");
+                    String userID = rs.getString("UserID");
+                    String fullName = rs.getString("Fullname");
+                    String password = rs.getString("Password");
+                    String role = "expert";
+                    Date createDate = rs.getDate("CreateDate");
+                    boolean status = rs.getBoolean("Status");
 
+                    resultList.add(new UserDTO(email, userID, role, fullName, password, status, createDate));
+                }
+            }                        
+        } finally {
+            closeConnection();
+        }
+        return resultList;
     }
 
     public UserDTO checkLogin(String email, String password) throws SQLException, NamingException {
@@ -103,9 +122,6 @@ public class UserDAO implements Serializable {
 
     public boolean createUserProfileDTO(String Email, String Avatar, String Gender,
             String Mobile, String Address) throws SQLException, NamingException {
-
-        Connection con = null;
-        PreparedStatement stm = null;
         try {
             //1. Connect DB
             con = DBHelpers.makeConnection();
@@ -130,20 +146,13 @@ public class UserDAO implements Serializable {
                 }
             } //end if con is opened
         } finally {
-            if (stm != null) {
-                stm.close();
-            }
-            if (con != null) {
-                con.close();
-            }
+            closeConnection();
         }
         return false;
     }
 
     public boolean createNewUser(String Email, String UserID, String Role,
             String Fullname, String Password, boolean Status, Date CreateDate) throws NamingException, SQLException {
-        Connection con = null;
-        PreparedStatement stm = null;
         try {
             //1. Connect DB
             con = DBHelpers.makeConnection();
@@ -169,12 +178,7 @@ public class UserDAO implements Serializable {
                 }
             } //end if con is opened
         } finally {
-            if (stm != null) {
-                stm.close();
-            }
-            if (con != null) {
-                con.close();
-            }
+            closeConnection();
         }
         return false;
 
@@ -182,6 +186,7 @@ public class UserDAO implements Serializable {
 
     public void getAllUsers()
             throws NamingException, SQLException {
+        userList = new ArrayList<>();
         try {
             con = DBHelpers.makeConnection();
             if (con != null) {
@@ -197,6 +202,7 @@ public class UserDAO implements Serializable {
                     String password = rs.getString("Password");
                     boolean status = rs.getBoolean("Status");
                     Date date = rs.getDate("CreateDate");
+                    
                     userList.add(new UserDTO(email, userID, role, fullname, password, status, date));
                 }
             }

@@ -21,7 +21,7 @@ import javax.servlet.http.HttpSession;
 @WebServlet(name = "LogoutServlet", urlPatterns = {"/LogoutServlet"})
 public class LogoutServlet extends HttpServlet {
 
-    private final String HOME_PAGE = "HomePage";
+    private final String WELCOME_PAGE = "WelcomePage";
     
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -36,7 +36,7 @@ public class LogoutServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         
-        String url = HOME_PAGE;
+        String url = WELCOME_PAGE;
         
         HttpSession session = request.getSession(false);
         if (session != null) {                    

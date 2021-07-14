@@ -15,7 +15,7 @@
       </div>
       <!--.popup-header-->
       <div class="popup-content">
-        <form action="#" class="sign-in-form">
+        <form action="Login" class="sign-in-form">
           <label for="email">Email:</label>
           <input type="text" id="email" name="txtEmail"/>
           <label for="password">Password:</label>
@@ -27,7 +27,7 @@
           <input type="submit" id="submit" value="Submit" />
         </form>
 
-        <form action="#" class="register-form">
+        <form action="Register" class="register-form">
           <label for="email-register">Email:</label>
           <input type="text" id="email-register" name="txtEmail" />
           <label for="firstname-register" style="padding-left: 100px; width:40%;">Full-name:</label>

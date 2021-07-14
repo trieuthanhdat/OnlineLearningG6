@@ -7,13 +7,6 @@ package utils;
 
 import java.time.LocalDateTime;
 
-/**
- *
- * @author ADMIN
- */
-import java.io.Serializable;
-import java.time.LocalDateTime;
-
 public class NewAccount  {
     private String email;
     private String password;

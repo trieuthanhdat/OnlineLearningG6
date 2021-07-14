@@ -1,7 +1,8 @@
-=ShowHomePageServlet
-WelcomePage=WelcomePage.jsp
-HomePage=HomePage.jsp
+=RedirectWelcomePageServlet
+WelcomePage=ShowWelcomePageServlet
+HomePage=ShowHomePageServlet
 Login=LoginServlet
-LoginServlet=HomePage.jsp
 Logout=LogoutServlet
+Register=RegisterNewAccountServlet
+SearchCourses=ShowSearchCourseServlet
 SinglePage=SinglePage.jsp

@@ -18,12 +18,6 @@ import utils.DBHelpers;
  */
 public class SubjectDAO implements Serializable {
 
-    private ArrayList<SubjectDTO> subject = null;
-
-    public ArrayList<SubjectDTO> getSubjectList() {
-        return subject;
-    }
-
     private Connection con = null;
     private PreparedStatement stm = null;
     private ResultSet rs = null;
@@ -57,7 +51,7 @@ public class SubjectDAO implements Serializable {
         try {
             con = DBHelpers.makeConnection();
             if (con != null) {
-                String sql = "SELECT SubjectID, SubjectCategoryID, Title, NumOfLessons,FeatureFlag "
+                String sql = "SELECT SubjectID, SubjectCategoryID, Title, NumOfLessons, FeatureFlag, "
                         + "Thumbnail, Owner, BriefInfo, Status "
                         + "FROM Subjects";
 
@@ -74,7 +68,7 @@ public class SubjectDAO implements Serializable {
                     String briefInfo = rs.getString("BriefInfo");
                     boolean status = rs.getBoolean("Status");
                     boolean flag = rs.getBoolean("FeatureFlag");
-                    subjectsList.add(new SubjectDTO(subjectID, categoryID, subjectTitle, numOfLessons, thumbnail, ownerID, briefInfo, null, status, flag));
+                    subjectsList.add(new SubjectDTO(subjectID, categoryID, subjectTitle, numOfLessons, thumbnail, ownerID, briefInfo, null, null, status, flag));
                 }
             }
         } finally {
@@ -261,5 +255,23 @@ public class SubjectDAO implements Serializable {
             closeConnection();
         }
         return false;
+    }
+    
+    public List<SubjectDTO> searchCourse(String courseName, int categoryID) {
+        List<SubjectDTO> resultList = new ArrayList<>();
+        if (categoryID == 0) {
+            for (SubjectDTO sub : subjectsList) {
+                if (sub.getTitle().contains(courseName)) {
+                    resultList.add(sub);
+                } 
+            }
+        } else {
+            for (SubjectDTO sub : subjectsList) {
+                if (sub.getSubjectCategoryID() == categoryID && sub.getTitle().contains(courseName)) {
+                    resultList.add(sub);
+                } 
+            }    
+        }
+        return resultList;
     }
 }

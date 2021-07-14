@@ -14,6 +14,7 @@ import DTO.SubjectRegistration.PackageDTO;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 import javax.naming.NamingException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -52,14 +53,13 @@ private final String LOGIN_PAGE = "login.html";
             ArrayList<MyRegistrationDTO> regislist = dao.getMyRegistrationArrayList();
             request.setAttribute("regislist", regislist);
             //Get Subject List
-            SubjectDAO subdao = new SubjectDAO();
-            subdao.getAllSubjects();
-            ArrayList<SubjectDTO> subjectlist = subdao.getSubjectList();
+            SubjectDAO subdao = new SubjectDAO();            
+            List<SubjectDTO> subjectlist = subdao.getSubjectsList();
             request.setAttribute("subjectlist", subjectlist);
             //Get PAckage List\
             PackageDAO pkgdao = new PackageDAO();
             pkgdao.getPackage();
-            ArrayList<PackageDTO> packagelist = pkgdao.getPackageList();
+            List<PackageDTO> packagelist = pkgdao.getPackageList();
             request.setAttribute("packagelist", packagelist);
             
             
