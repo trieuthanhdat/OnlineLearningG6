@@ -11,18 +11,17 @@
         <div class="row no-gutters">
             <div class="col-12">
                 <div class="slider-carousel owl-carousel">
-                    <c:forEach items="SUBJECT_LIST" var="list" begin="1" end="3">
+                   
                         <div class="single-slider slider-bg-1 text-center">
                             <div class="slider-inner">
-                                <h1>${list.title}</h1>
-                                >
+                                <h1>Welcome to Online learning</h1>
                                 <h5>
-                                    ${list.briefInfo}
+                                   I learn - I study
                                 </h5>
                                 <a class="btn get-started-btn" href="">Get Started</a>
                             </div>
                         </div>
-                    </c:forEach>
+                   
                 </div>
             </div>
         </div>

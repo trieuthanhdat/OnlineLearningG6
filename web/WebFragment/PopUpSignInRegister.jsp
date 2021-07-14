@@ -17,9 +17,9 @@
       <div class="popup-content">
         <form action="#" class="sign-in-form">
           <label for="email">Email:</label>
-          <input type="text" id="email" />
+          <input type="text" id="email" name="txtEmail"/>
           <label for="password">Password:</label>
-          <input type="password" id="password" />
+          <input type="password" id="password" name="txtPassword"/>
           <p class="check-mark">
             <input type="checkbox" id="remember-me" />
             <label for="remember-me">Remember me</label>
@@ -29,15 +29,13 @@
 
         <form action="#" class="register-form">
           <label for="email-register">Email:</label>
-          <input type="text" id="email-register" />
-          <label for="firstname-register" style="padding-left: 100px; width:40%;">first-name:</label>
-          <input type="text" id="firstname-register"  style="width: 40%;"/>
-          <label for="lastname-register" style="padding-left: 100px; width:40%;">last-name:</label>
-          <input type="text" id="lastname-register" style="width: 40%;"/>
+          <input type="text" id="email-register" name="txtEmail" />
+          <label for="firstname-register" style="padding-left: 100px; width:40%;">Full-name:</label>
+          <input type="text" id="lastname-register" name="txtFullName" style="width: 40%;"/>
           <label for="password-register">Password:</label>
-          <input type="password" id="password-register" />
+          <input type="password" id="password-register" name="txtPassword"/>
           <label for="password-confirmation">Confirm Password:</label>
-          <input type="password-confirmation" id="password-confirmation" />
+          <input type="password-confirmation" name="txtConfirmPassword" id="password-confirmation" />
           <p class="check-mark">
             <input type="checkbox" id="accept-terms" />
             <label for="accept-terms"

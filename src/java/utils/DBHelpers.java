@@ -23,8 +23,6 @@ public class DBHelpers implements Serializable {
         }
         return con;
     }
-    public static void main(String[] args) {
-        System.out.println("sret");
-    }
+
 
 }
