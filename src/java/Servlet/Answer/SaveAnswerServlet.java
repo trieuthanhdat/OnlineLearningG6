@@ -3,32 +3,27 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+package Servlet.Answer;
 
-import DAO.Quiz.QuizOptionDAO;
-import DAO.Quiz.QuizQuestionDAO;
-import DTO.Quiz.QuizOptionDTO;
-import DTO.Quiz.QuizQuestionDTO;
+import DTO.Answer.AnswerDTO;
+import DAO.Answer.UserAnswerDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.SQLException;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.naming.NamingException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
  * @author Admin
  */
-@WebServlet(name = "GetQuizQuestionServlet", urlPatterns = {"/GetQuizQuestionServlet"})
-public class GetQuizQuestionServlet extends HttpServlet {
+@WebServlet(name = "SaveAnswerServlet", urlPatterns = {"/SaveAnswerServlet"})
+public class SaveAnswerServlet extends HttpServlet {
     private final static String TAKE_QUIZ = "quiz.jsp";
-    private final static String QUESTION_NOT_FOUND = "error.jsp";
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -44,30 +39,19 @@ public class GetQuizQuestionServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
         
-        String url = QUESTION_NOT_FOUND;
-        int QuizID = Integer.parseInt(request.getParameter("quizID"));
+        String url = TAKE_QUIZ;
+        
+        int questionNo = Integer.parseInt(request.getParameter("questionNo"));
+        String answer = request.getParameter("option");
         
         try {
-            QuizQuestionDAO dao1 = new QuizQuestionDAO();
-            dao1.importQuizQuestion(QuizID);
-            List<QuizQuestionDTO> question = dao1.getQuizQuestionList();
-            
-            QuizOptionDAO dao2 = new QuizOptionDAO();
-            dao2.importOption(question);
-            List<QuizOptionDTO> option = dao2.getOption();
-            
-            if (question != null && option != null) {
-                request.setAttribute("QUIZ_QUESTION", question);
-                request.setAttribute("QUIZ_QUESTION_OPTION", option);
-                url = TAKE_QUIZ;
-            }
-            
-        } catch (NamingException ex) {
-            Logger.getLogger(GetQuizQuestionServlet.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
-            Logger.getLogger(GetQuizQuestionServlet.class.getName()).log(Level.SEVERE, null, ex);
+            HttpSession session = request.getSession();
+            List<AnswerDTO> list = (List<AnswerDTO>) session.getAttribute("AnswerList");
+            AnswerDTO dto = new AnswerDTO(answer, 0, questionNo);
+            list.add(dto);
+            session.setAttribute("AnswerList", list);
         } finally {
-            request.getRequestDispatcher(url).forward(request, response);
+            response.sendRedirect(url);
             out.close();
         }
     }

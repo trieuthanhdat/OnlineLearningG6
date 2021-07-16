@@ -24,7 +24,7 @@
             <input type="checkbox" id="remember-me" />
             <label for="remember-me">Remember me</label>
           </p>
-          <input type="submit" id="submit" value="Submit" />
+          <input type="submit" id="submit" value="Login" />
         </form>
 
         <form action="Register" class="register-form">

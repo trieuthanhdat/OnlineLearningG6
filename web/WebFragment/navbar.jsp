@@ -20,7 +20,7 @@
                 id="navbarCollapse"
                 >
                 <div class="navbar-nav mr-auto">
-                    <a href="HomePage.jsp" class="nav-item nav-link active">Home</a>
+                    <a href="HomePage" class="nav-item nav-link active">Home</a>
                     <div class="nav-item dropdown">
                         <a
                             href="#"
@@ -64,25 +64,28 @@
                             </li>
                         </ul>
                     </div>
-                    <a href="SinglePage.jsp" class="nav-item nav-link"
+                    <a href="SinglePage" class="nav-item nav-link"
                        >Single Page</a
                     >
-                    <a href="contact.jsp" class="nav-item nav-link">Contact Us</a>
-                    <div class="input-group" style="width: 400px">
-                        <div class="form-outline">
-                            <input
-                                type="text"
-                                placeholder="Search"
-                                style="min-height: 100%; border-radius: 10px 0px 0px 10px"
-                                />
+                    <a href="contact" class="nav-item nav-link">Contact Us</a>
+                    <form action="SearchCourse"> 
+                        <div class="input-group" style="width: 400px">
+                            <div class="form-outline">
+                                <input
+                                    type="text"
+                                    name="txtCourseName"
+                                    placeholder="Search"
+                                    style="min-height: 100%; border-radius: 10px 0px 0px 10px"
+                                    />
+                            </div>
+                            <button type="submit"
+                                    class="btn btn-primary"
+                                    style="border-radius: 0px 10px 10px 0px;    margin-top: inherit;"
+                                    >
+                                <i class="fa fa-search" ></i>
+                            </button>
                         </div>
-                        <button
-                            class="btn btn-primary"
-                            style="border-radius: 0px 10px 10px 0px"
-                            >
-                            <i class="fa fa-search"></i>
-                        </button>
-                    </div>
+                    </form>
                 </div>
                 <div class="social ml-auto">
                     <div class="dropdownbox">
@@ -93,7 +96,7 @@
                         <div class="dropdown-content">
                             <a href="#" class="list-item" id="sign-in">Login</a>
                             <a href="#" class="list-item">Profile</a>
-                            <a href="MyCourse.jsp" class="list-item">My Courses</a>
+                            <a href="MyCourse" class="list-item">My Courses</a>
                             <a href="Logout" class="list-item">Log out</a>
                         </div>
                     </div>

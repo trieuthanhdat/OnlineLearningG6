@@ -6,7 +6,7 @@
 package Servlet.Subject;
 
 import DAO.Subject.SubjectCategoryDAO;
-import DAO.User.UserDAO;
+import Temp.UsersDAO;
 import DTO.Subject.SubjectCategoryDTO;
 import DTO.User.UserDTO;
 import java.io.IOException;
@@ -52,7 +52,7 @@ public class ShowNewSubjectFormServlet extends HttpServlet {
                 if (dto != null) {
                     SubjectCategoryDAO subCatDAO = new SubjectCategoryDAO();
                     List<SubjectCategoryDTO> subCatList = subCatDAO.getSubjectsCategoryList();
-                    UserDAO userDAO = new UserDAO();
+                    UsersDAO userDAO = new UsersDAO();
                     List<UserDTO> expertList = userDAO.getAllExperts();
                     if (!subCatList.isEmpty() && !expertList.isEmpty()) {
                         request.setAttribute("CATEGORY_LIST", subCatList);

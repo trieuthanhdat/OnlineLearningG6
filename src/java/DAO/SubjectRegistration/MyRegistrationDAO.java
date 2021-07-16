@@ -5,6 +5,7 @@
  */
 package DAO.SubjectRegistration;
 
+import DTO.Marketing.StatisDTO;
 import DTO.SubjectRegistration.MyRegistrationDTO;
 import utils.DBHelpers;
 import java.io.Serializable;
@@ -73,7 +74,44 @@ public class MyRegistrationDAO implements Serializable{
             }
         }
     }
-    
+    public boolean createNewRegistration(String userID, int subjectID, int packageID,
+            Date validFrom, Date validTo, float TotalCost, Date RegistrationTime, String LastUpdatedBy, boolean Status) throws NamingException, SQLException{
+        Connection con =null;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+        try{
+           con = DBHelpers.makeConnection();
+           if(con!=null){
+               String sql = "Insert Into "
+                       + "Registration(UserID,SubjectID,PakageID,ValidFrom,ValidTo,"
+                       + "TotalCost,RegistrationTime,LastUpdatedBy,Status) "
+                       + "Values(?,?,?,?,?,?,?,?,?) ";
+               stm= con.prepareStatement(sql);
+               stm.setString(1, userID);
+               stm.setInt(2, subjectID);
+               stm.setInt(3, packageID);
+               stm.setDate(4, validFrom);
+               stm.setDate(5, validTo);
+               stm.setFloat(6, TotalCost);
+               stm.setDate(7, RegistrationTime);
+               stm.setString(8, LastUpdatedBy);
+               stm.setBoolean(9, Status);
+               int rowEffect = stm.executeUpdate();
+               if(rowEffect>0){
+                   return true;
+               }
+           }
+        }finally{
+            if(rs!=null){
+                rs.close();
+            }if(stm!=null){
+                stm.close();
+            }if(con!=null){
+                con.close();
+            }
+        }
+        return false;
+    }
     public void searchUserID(String searchValue) throws NamingException, SQLException{
         Connection con =null;
         PreparedStatement stm = null;
@@ -120,5 +158,106 @@ public class MyRegistrationDAO implements Serializable{
             }
         }
     }
+    public int getNumberOfRegistration() throws NamingException, SQLException{
+        Connection con = null;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+        int num = 0;
+        try{
+                //1.Connect DB
+            con = DBHelpers.makeConnection();
+            if(con!=null){
+                //2.Create SQL String
+                String sql = "Select COUNT (RegistrationID) " 
+                            + "From Registration " ;
+                            
+                //3.Create Statement Object and assign Parameter value if any
+               stm = con.prepareStatement(sql);
+               
+               rs = stm.executeQuery();
+               if (rs.next()){
+                num = rs.getInt(1);
+                }
+            }//end if it is existed
+            //end if connection is opened
+        }finally{
+            if(rs!=null){
+                rs.close();
+            }
+            if(stm!=null){
+                stm.close();
+            }   
+            if(con!=null){
+                con.close();
+            }
+        }
+        return num;
+    }
+    public int getSumProfit() throws NamingException, SQLException{
+        Connection con = null;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+        int total=0;
+        try{
+            con = DBHelpers.makeConnection();
+            if(con!=null){
+                String sql = "SELECT TotalCost "
+                        +" From Registration";
+                stm = con.prepareStatement(sql);
+                rs = stm.executeQuery();
+                while(rs.next()){
+                    int totalCost = rs.getInt("TotalCost");
+                    total += totalCost;
+                    }
+                }
+            }  
+        finally{
+            if(rs!=null){
+                rs.close();
+            }if(stm !=null){
+                stm.close();
+            }if(con!=null){
+                con.close();
+            }
+        }
+        return total;
+    }
+    
+    public StatisDTO getProfitByDate(Date from, Date to) throws NamingException, SQLException{
+        Connection con = null;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+        int total=0;
+        StatisDTO dto = null;
+        try{
+            con = DBHelpers.makeConnection();
+            if(con!=null){
+                String sql = "SELECT TotalCost "
+                        +" From Registration "
+                        + "Where RegistrationTime Between ? and ? ";
+                stm = con.prepareStatement(sql);
+                stm.setDate(1, from);
+                stm.setDate(2,to);
+                rs = stm.executeQuery();
+                while(rs.next()){
+                    int totalCost = rs.getInt("TotalCost");
+                    total += totalCost;
+                    
+                }
+                dto= new StatisDTO(0, 0, total, 0, 0);
+                }
+            }  
+        finally{
+            if(rs!=null){
+                rs.close();
+            }if(stm !=null){
+                stm.close();
+            }if(con!=null){
+                con.close();
+            }
+        }
+        return dto;
+    }
+    
     
 }

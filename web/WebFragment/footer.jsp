@@ -71,7 +71,7 @@
         <div class="row">
             <div class="col-md-6 copyright">
                 <p>
-                    Inspired by  <a href="https://htmlcodex.com">HTML Codex</a>.
+                    Inspired by  <a href="#">HTML Codex</a>.
                     and "Proximet" by<a href="http://www.anarieldesign.com/"> Anariel Design</a>. All rights reserved.
                 </p>
             </div>

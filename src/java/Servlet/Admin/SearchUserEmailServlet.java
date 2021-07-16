@@ -3,7 +3,8 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-import DAO.User.UserDAO;
+package Servlet.Admin;
+import Temp.UsersDAO;
 import DTO.User.UserDTO;
 import java.io.IOException;
 import java.sql.SQLException;
@@ -42,7 +43,7 @@ public class SearchUserEmailServlet extends HttpServlet {
         String url = SEARCH_PAGE;
         try {
 
-            UserDAO dao = new UserDAO();
+            UsersDAO dao = new UsersDAO();
             if (searchValue.trim().length() > 0) {//neu search co gia tri thi xu li
                 dao.searchUserEmail(searchValue);//lay user theo user email
                 List<UserDTO> result = dao.getUserList();//search co the tra nhieu ket qua

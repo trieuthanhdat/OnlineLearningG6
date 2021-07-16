@@ -17,13 +17,13 @@ import javax.naming.NamingException;
  *
  * @author ASUS
  */
-public class LessonDAO implements Serializable{
-    
+public class LessonDAO implements Serializable {
+
     private Connection con = null;
     private PreparedStatement stm = null;
     private ResultSet rs = null;
-    
-    private void closeConnection() 
+
+    private void closeConnection()
             throws SQLException {
         if (rs != null) {
             rs.close();
@@ -34,27 +34,68 @@ public class LessonDAO implements Serializable{
         if (con != null) {
             con.close();
         }
-    }    
-    
-    public LessonDAO() 
+    }
+
+    public LessonDAO()
             throws NamingException, SQLException {
         getAllLessons();
     }
-    
+
+    public ArrayList<LessonDTO> getLessonIDbySubjectID(int subjectID) throws NamingException, SQLException {
+        Connection con = null;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+        ArrayList<LessonDTO> list = null;
+        try {
+            //1.Connect DB
+            con = DBHelpers.makeConnection();
+            if (con != null) {
+                //2.Create SQL String
+                String sql = "Select LessonID "
+                        + "From Lesson "
+                        + "Where SubjectID = ? And Type = 'Quiz' ";
+                //3.Create Statement Object and assign Parameter value if any
+                stm = con.prepareStatement(sql);
+                stm.setInt(1, subjectID);
+                rs = stm.executeQuery();
+                list = new ArrayList<>();
+                while (rs.next()) {
+
+                    int lessonid = rs.getInt("LessonID");
+
+                    LessonDTO dto = new LessonDTO(lessonid, subjectID, "", 0, "", 0, true, null);
+                    list.add(dto);
+                }
+            }//end if it is existed
+            //end if connection is opened
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (stm != null) {
+                stm.close();
+            }
+            if (con != null) {
+                con.close();
+            }
+        }
+        return list;
+
+    }
     private List<LessonDTO> lessonsList = new ArrayList<>();
-    
-    private void getAllLessons() 
+
+    private void getAllLessons()
             throws SQLException, NamingException {
         try {
             con = DBHelpers.makeConnection();
             if (con != null) {
                 String sql = "SELECT LessonID, SubjectID, Name, "
-                           + "LessonOrder, Type, TopicID, Status "
-                           + "FROM Lesson";
+                        + "LessonOrder, Type, TopicID, Status "
+                        + "FROM Lesson";
                 stm = con.prepareStatement(sql);
-                
+
                 rs = stm.executeQuery();
-                while(rs.next()) {
+                while (rs.next()) {
                     int lessonID = rs.getInt("LessonID");
                     int subjectID = rs.getInt("SubjectID");
                     String name = rs.getString("Name");
@@ -62,7 +103,7 @@ public class LessonDAO implements Serializable{
                     String type = rs.getString("Type");
                     int topicID = rs.getInt("TopicID");
                     boolean status = rs.getBoolean("Status");
-                    
+
                     lessonsList.add(new LessonDTO(lessonID, subjectID, name, order, type, topicID, status, null));
                 }
             }
@@ -70,23 +111,23 @@ public class LessonDAO implements Serializable{
             closeConnection();
         }
     }
-    
-    public List<LessonDTO> getCurrLessons(int subjectID) {        
+
+    public List<LessonDTO> getCurrLessons(int subjectID) {
         List<LessonDTO> currLessonList = getLessonsBySubjectID(subjectID);
         List<LessonDTO> resultList = new ArrayList<>();
-        
+
         for (LessonDTO lesson : currLessonList) {
             if (lesson.isStatus()) {
                 resultList.add(lesson);
             }
         }
-        
-        return currLessonList;        
+
+        return currLessonList;
     }
-    
-    public LessonDTO getCurrLessonDetails(int subjectID, int topicOrder, int lessonOrder) 
+
+    public LessonDTO getCurrLessonDetails(int subjectID, int topicOrder, int lessonOrder)
             throws NamingException, SQLException {
-        
+
         LessonDTO currLesson = null;
         try {
             List<LessonDTO> lessons = getLessonsBySubjectID(subjectID);
@@ -101,7 +142,9 @@ public class LessonDAO implements Serializable{
                 }
             }
             // after traversing through the list and don't find topic return null
-            if (currTopicID == 0) return currLesson;
+            if (currTopicID == 0) {
+                return currLesson;
+            }
             // check for the right topicID and order.
             for (LessonDTO lesson : lessons) {
                 if (lesson.getTopicID() == currTopicID && lesson.getOrder() == lessonOrder) {
@@ -109,22 +152,22 @@ public class LessonDAO implements Serializable{
                     break;
                 }
             }
-            
+
             con = DBHelpers.makeConnection();
             if (con != null) {
                 String sql = "SELECT QuizID, VideoLink, HtmlContent "
-                           + "FROM LessonDetails "
-                           + "WHERE LessonID = ?";
-                
+                        + "FROM LessonDetails "
+                        + "WHERE LessonID = ?";
+
                 stm = con.prepareStatement(sql);
                 stm.setInt(1, currLesson.getLessonID());
-                
+
                 rs = stm.executeQuery();
                 if (rs.next()) {
                     int quizID = rs.getInt("QuizID");
                     String videoLink = rs.getString("VideoLink");
                     String htmlContent = rs.getString("HtmlContent");
-                    
+
                     LessonDetailsDTO details = new LessonDetailsDTO(quizID, videoLink, htmlContent);
                     currLesson.setDetails(details);
                 }
@@ -134,7 +177,7 @@ public class LessonDAO implements Serializable{
         }
         return currLesson;
     }
-    
+
     public LessonDTO getLessonByID(int lessonID) {
         LessonDTO searchLesson = null;
         for (LessonDTO lesson : lessonsList) {
@@ -144,16 +187,16 @@ public class LessonDAO implements Serializable{
         }
         return searchLesson;
     }
-    
-    public LessonDetailsDTO getLessonDetailsByID(int lessonID) 
+
+    public LessonDetailsDTO getLessonDetailsByID(int lessonID)
             throws NamingException, SQLException {
         LessonDetailsDTO details = null;
         try {
             con = DBHelpers.makeConnection();
             if (con != null) {
                 String sql = "SELECT QuizID, VideoLink, HtmlContent "
-                           + "FROM LessonDetails "
-                           + "WHERE LessonID = ?";
+                        + "FROM LessonDetails "
+                        + "WHERE LessonID = ?";
                 stm = con.prepareStatement(sql);
                 stm.setInt(1, lessonID);
                 rs = stm.executeQuery();
@@ -161,8 +204,8 @@ public class LessonDAO implements Serializable{
                     int quizID = rs.getInt("QuizID");
                     String videoLink = rs.getString("VideoLink");
                     String htmlContent = rs.getString("HtmlContent");
-                    
-                    details = new LessonDetailsDTO(quizID, videoLink, htmlContent);                    
+
+                    details = new LessonDetailsDTO(quizID, videoLink, htmlContent);
                 }
             }
         } finally {
@@ -170,120 +213,119 @@ public class LessonDAO implements Serializable{
         }
         return details;
     }
-    
-    public boolean checkSubjectHasValidLessons(int subjectID) {        
+
+    public boolean checkSubjectHasValidLessons(int subjectID) {
         List<LessonDTO> currLessons = getCurrLessons(subjectID); // get valid lessons with subjectID
-        
+
         if (currLessons.isEmpty()) {
             return false;
         }
-        
+
         for (LessonDTO lesson : currLessons) {
             if (lesson.getSubjectID() == subjectID && lesson.getType().equals("Subject Topic")) {
                 if (lesson.getOrder() == currLessons.size()) {
                     return false;
-                }
-                // order = index + 1 and this checks if the lesson after the topic lesson is a normal lesson
-                else if (!currLessons.get(lesson.getOrder()).getType().equals("Lesson")) { 
+                } // order = index + 1 and this checks if the lesson after the topic lesson is a normal lesson
+                else if (!currLessons.get(lesson.getOrder()).getType().equals("Lesson")) {
                     return false;
-                }                
+                }
             }
         }
         return true;
     }
-        
+
     public List<LessonDTO> getLessonsBySubjectID(int subjectID) {
         List<LessonDTO> validLessons = new ArrayList<>();
         List<LessonDTO> invalidLessons = new ArrayList<>();
-        
+
         for (LessonDTO lesson : lessonsList) {
             if (lesson.getSubjectID() == subjectID) {
-                if (lesson.isStatus()) 
+                if (lesson.isStatus()) {
                     validLessons.add(lesson);
-                else invalidLessons.add(lesson);
+                } else {
+                    invalidLessons.add(lesson);
+                }
             }
         }
 
         List<LessonDTO> topicList = new ArrayList<>();
-        
+
         // after this topicList only contains topic following order and lessons only contains lessons.
         int minOrderForTopic = 1;
         for (LessonDTO lesson : validLessons) {
             for (LessonDTO lessonItem : validLessons) {
                 if (lessonItem.getType().equals("Subject Topic") && lessonItem.getOrder() == minOrderForTopic) {
                     minOrderForTopic++;
-                    topicList.add(lessonItem);                    
+                    topicList.add(lessonItem);
                 }
             }
         }
-        
+
         List<LessonDTO> resultList = new ArrayList<>();
-        
+
         int minOrderForLesson = 1;
         for (LessonDTO topic : topicList) {
             resultList.add(topic);
-            
+
             for (LessonDTO lesson : validLessons) {
                 for (LessonDTO lessonItem : validLessons) {
                     if (lessonItem.getTopicID() == topic.getLessonID() && lessonItem.getOrder() == minOrderForLesson) {
                         minOrderForLesson++;
-                        resultList.add(lessonItem);                        
+                        resultList.add(lessonItem);
                     }
-                } 
+                }
             }
-            
+
             for (LessonDTO lesson : invalidLessons) {
                 if (lesson.getTopicID() == topic.getLessonID()) {
                     resultList.add(lesson);
                 }
             }
-            
+
             minOrderForLesson = 1;
         }
-        
-        
-        
+
         return resultList;
     }
-    
+
     public List<LessonDTO> getTopicsBySubjectID(int subjectID) {
         List<LessonDTO> topics = new ArrayList<>();
-                
-        for (LessonDTO lesson : lessonsList) {            
+
+        for (LessonDTO lesson : lessonsList) {
             if (lesson.getSubjectID() == subjectID && lesson.isStatus() && lesson.getType().equals("Subject Topic")) {
                 topics.add(lesson);
             }
         }
-        
+
         List<LessonDTO> resultList = new ArrayList<>();
         int minOrder = 1;
         for (LessonDTO lesson : topics) {
             for (LessonDTO lessonItem : topics) {
                 if (lessonItem.getOrder() == minOrder) {
                     minOrder++;
-                    resultList.add(lessonItem);                    
+                    resultList.add(lessonItem);
                 }
             }
         }
-        
+
         return resultList;
     }
-    
+
     public List<LessonDTO> getLessonsByTopicID(int topicID) {
         List<LessonDTO> resultList = new ArrayList<>();
-        
+
         for (LessonDTO lesson : lessonsList) {
             if (lesson.getTopicID() == topicID && lesson.isStatus()) {
                 resultList.add(lesson);
             }
         }
-        
+
         return resultList;
     }
-    
+
     public boolean checkValidOrderForAdding(int subjectID, int order, int topicID) {
         boolean result = false;
-        
+
         if (topicID == 0) { // new lesson is a subject topic
             List<LessonDTO> lessons = getTopicsBySubjectID(subjectID);
             if (order <= lessons.size() + 1) {
@@ -294,14 +336,14 @@ public class LessonDAO implements Serializable{
             if (order <= lessons.size() + 1) {
                 result = true;
             }
-        }        
-        
+        }
+
         return result;
     }
-    
+
     public boolean checkValidOrderForUpdating(int subjectID, int order, int oldTopicID, int newTopicID) {
         boolean result = false;
-        
+
         if (newTopicID == 0) { // new lesson is a subject topic
             List<LessonDTO> lessons = getTopicsBySubjectID(subjectID);
             if (order <= lessons.size()) {
@@ -319,14 +361,14 @@ public class LessonDAO implements Serializable{
                     result = true;
                 }
             }
-        }        
-        
+        }
+
         return result;
     }
-    
+
     private boolean checkDuplicateOrder(int subjectID, int order, int topicID) {
         boolean result = false;
-        
+
         if (topicID == 0) {
             List<LessonDTO> topicsInSubject = getTopicsBySubjectID(subjectID);
             for (LessonDTO topic : topicsInSubject) {
@@ -340,25 +382,25 @@ public class LessonDAO implements Serializable{
                 if (lesson.getOrder() == order) {
                     return true;
                 }
-            }                   
+            }
         }
-        
+
         return result;
     }
-    
-    public boolean addNewLesson(LessonDTO newLesson) 
+
+    public boolean addNewLesson(LessonDTO newLesson)
             throws NamingException, SQLException {
         boolean addResult = false;
         int subID = newLesson.getSubjectID();
         int order = newLesson.getOrder();
         int topicID = newLesson.getTopicID();
-        
+
         try {
             con = DBHelpers.makeConnection();
             if (con != null) {
                 String sql = "INSERT INTO Lesson (LessonID, SubjectID, Name, "
-                           + "LessonOrder, Type, TopicID, Status) "
-                           + "VALUES (?, ?, ?, ?, ?, ?, ?)";
+                        + "LessonOrder, Type, TopicID, Status) "
+                        + "VALUES (?, ?, ?, ?, ?, ?, ?)";
                 stm = con.prepareStatement(sql);
                 stm.setInt(1, lessonsList.size() + 1);
                 stm.setInt(2, subID);
@@ -367,34 +409,40 @@ public class LessonDAO implements Serializable{
                 stm.setString(5, newLesson.getType());
                 stm.setInt(6, topicID);
                 stm.setBoolean(7, newLesson.isStatus());
-                
+
                 int result1 = stm.executeUpdate();
-                
+
                 sql = "INSERT INTO LessonDetails (LessonID, QuizID, VideoLink, HtmlContent) "
-                    + "VALUES (?, ?, ?, ?)";
+                        + "VALUES (?, ?, ?, ?)";
                 stm = con.prepareStatement(sql);
                 stm.setInt(1, lessonsList.size() + 1);
-                
+
                 if (newLesson.getDetails().getQuizID() == 0) {
                     stm.setNull(2, Types.INTEGER);
-                } else stm.setInt(2, newLesson.getDetails().getQuizID());              
-                
+                } else {
+                    stm.setInt(2, newLesson.getDetails().getQuizID());
+                }
+
                 if (newLesson.getDetails().getVideoLink().isEmpty()) {
                     stm.setNull(3, Types.VARCHAR);
-                } else stm.setString(3, newLesson.getDetails().getVideoLink());
-                
+                } else {
+                    stm.setString(3, newLesson.getDetails().getVideoLink());
+                }
+
                 if (newLesson.getDetails().getHtmlContent().isEmpty()) {
                     stm.setNull(4, Types.VARCHAR);
-                } else stm.setString(4, newLesson.getDetails().getHtmlContent());
-                
+                } else {
+                    stm.setString(4, newLesson.getDetails().getHtmlContent());
+                }
+
                 int result2 = stm.executeUpdate();
-                
+
                 if (result1 != 0 && result2 != 0) {
                     if (checkDuplicateOrder(subID, order, topicID)) {
                         List<LessonDTO> lessons;
                         // get an ordered list of topics or lessons based on topicID
                         if (newLesson.getTopicID() == 0) {
-                            lessons = getTopicsBySubjectID(subID);                            
+                            lessons = getTopicsBySubjectID(subID);
                         } else {
                             lessons = getLessonsByTopicID(topicID);
                         }
@@ -406,19 +454,19 @@ public class LessonDAO implements Serializable{
                             }
                         }
                         // update the order of every lesson after the newly added lesson
-                        for (LessonDTO lesson : lessonsAfterRemove) {                                                    
+                        for (LessonDTO lesson : lessonsAfterRemove) {
                             sql = "UPDATE Lesson "
-                                + "SET LessonOrder = ? "
-                                + "WHERE LessonID = ?";
+                                    + "SET LessonOrder = ? "
+                                    + "WHERE LessonID = ?";
                             stm = con.prepareStatement(sql);
                             stm.setInt(1, lesson.getOrder() + 1);
-                            stm.setInt(2, lesson.getLessonID());                            
-                            
+                            stm.setInt(2, lesson.getLessonID());
+
                             int updateOrderResult = stm.executeUpdate();
                             if (updateOrderResult == 0) {
-                                
+
                             }
-                        }                                                
+                        }
                     }
                     addResult = true;
                 }
@@ -428,8 +476,8 @@ public class LessonDAO implements Serializable{
         }
         return addResult;
     }
-    
-    public boolean updateLesson(LessonDTO lesson, int oldOrder, int oldTopicID) 
+
+    public boolean updateLesson(LessonDTO lesson, int oldOrder, int oldTopicID)
             throws NamingException, SQLException {
         boolean result = false;
         try {
@@ -442,39 +490,38 @@ public class LessonDAO implements Serializable{
                         // switch order between 2 lessons
                         if (l.getOrder() == lesson.getOrder()) {
                             String sql = "UPDATE Lesson "
-                                       + "SET LessonOrder = ? "
-                                       + "WHERE LessonID = ?";
-                            
+                                    + "SET LessonOrder = ? "
+                                    + "WHERE LessonID = ?";
+
                             stm = con.prepareStatement(sql);
                             stm.setInt(1, oldOrder);
                             stm.setInt(2, l.getLessonID());
                             stm.executeUpdate();
                         }
                     }
-                }
-                // change topic makes order changes as well
+                } // change topic makes order changes as well
                 else if (oldTopicID != lesson.getTopicID()) {
                     List<LessonDTO> lessonsFromOldTopic = getLessonsByTopicID(oldTopicID);
                     for (LessonDTO l : lessonsFromOldTopic) {
                         // push up the order of lessons behind the updated lesson by 1
                         if (l.getOrder() > oldOrder) {
                             String sql = "UPDATE Lesson "
-                                       + "SET LessonOrder = ? "
-                                       + "WHERE LessonID = ?";
+                                    + "SET LessonOrder = ? "
+                                    + "WHERE LessonID = ?";
                             stm = con.prepareStatement(sql);
                             stm.setInt(1, l.getOrder() - 1);
                             stm.setInt(2, l.getLessonID());
                             stm.executeUpdate();
                         }
                     }
-                    
-                    List<LessonDTO> lessonsFromNewTopic = getLessonsByTopicID(lesson.getTopicID());                                             
+
+                    List<LessonDTO> lessonsFromNewTopic = getLessonsByTopicID(lesson.getTopicID());
                     for (LessonDTO l : lessonsFromNewTopic) {
                         // push down the order of lessons behind the updated lesson by 1
                         if (l.getOrder() >= lesson.getOrder()) {
                             String sql = "UPDATE Lesson "
-                                       + "SET LessonOrder = ? "
-                                       + "WHERE LessonID = ?";
+                                    + "SET LessonOrder = ? "
+                                    + "WHERE LessonID = ?";
                             stm = con.prepareStatement(sql);
                             stm.setInt(1, l.getOrder() + 1);
                             stm.setInt(2, l.getLessonID());
@@ -482,36 +529,40 @@ public class LessonDAO implements Serializable{
                         }
                     }
                 }
-                
+
                 String sql = "UPDATE Lesson "
-                           + "SET Name = ?, TopicID = ?, LessonOrder = ? "
-                           + "WHERE LessonID = ?";
+                        + "SET Name = ?, TopicID = ?, LessonOrder = ? "
+                        + "WHERE LessonID = ?";
                 stm = con.prepareStatement(sql);
                 stm.setString(1, lesson.getName());
                 stm.setInt(2, lesson.getTopicID());
                 stm.setInt(3, lesson.getOrder());
                 stm.setInt(4, lesson.getLessonID());
-                
+
                 int updateResult1 = stm.executeUpdate();
-                
+
                 sql = "UPDATE LessonDetails "
-                    + "SET QuizID = ?, VideoLink = ?, HtmlContent = ? "
-                    + "WHERE LessonID = ?";
+                        + "SET QuizID = ?, VideoLink = ?, HtmlContent = ? "
+                        + "WHERE LessonID = ?";
                 stm = con.prepareStatement(sql);
-                
+
                 if (lesson.getDetails().getQuizID() == 0) {
                     stm.setNull(1, Types.INTEGER);
-                } else stm.setInt(1, lesson.getDetails().getQuizID());
-                
+                } else {
+                    stm.setInt(1, lesson.getDetails().getQuizID());
+                }
+
                 if (lesson.getDetails().getVideoLink().isEmpty()) {
                     stm.setNull(2, Types.VARCHAR);
-                } else stm.setString(2, lesson.getDetails().getVideoLink());
-                
+                } else {
+                    stm.setString(2, lesson.getDetails().getVideoLink());
+                }
+
                 stm.setString(3, lesson.getDetails().getHtmlContent());
                 stm.setInt(4, lesson.getLessonID());
-                
+
                 int updateResult2 = stm.executeUpdate();
-                
+
                 if (updateResult1 != 0 && updateResult2 != 0) {
                     result = true;
                 }

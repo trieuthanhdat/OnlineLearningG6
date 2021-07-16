@@ -9,7 +9,6 @@ import DAO.Lesson.LessonDAO;
 import DAO.Quiz.QuizDAO;
 import DTO.Lesson.LessonDTO;
 import DTO.Lesson.LessonDetailsDTO;
-import DTO.Quiz.QuizDTO;
 import DTO.User.UserDTO;
 import java.io.IOException;
 import java.sql.SQLException;

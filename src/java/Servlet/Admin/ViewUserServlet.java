@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package khoalnm.controller;
+package Servlet.Admin;
 
-import DAO.User.UserDAO;
+import Temp.UsersDAO;
 import DTO.User.UserDTO;
 import java.io.IOException;
 import java.sql.SQLException;
@@ -42,7 +42,7 @@ public class ViewUserServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         String url = USER_PAGE;
         try {
-            UserDAO userdao = new UserDAO();
+            UsersDAO userdao = new UsersDAO();
             userdao.getAllUsers();
             List<UserDTO> userList = userdao.getUserList();
             request.setAttribute("userlist", userList);

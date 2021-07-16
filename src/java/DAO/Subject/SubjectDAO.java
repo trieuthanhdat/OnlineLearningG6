@@ -4,6 +4,7 @@ import DTO.Subject.SubjectDTO;
 import DTO.Subject.SubjectDetailsDTO;
 import java.io.Serializable;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -11,6 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.naming.NamingException;
 import utils.DBHelpers;
+import DTO.Marketing.StatisDTO;
+
 
 /**
  *
@@ -51,7 +54,7 @@ public class SubjectDAO implements Serializable {
         try {
             con = DBHelpers.makeConnection();
             if (con != null) {
-                String sql = "SELECT SubjectID, SubjectCategoryID, Title, NumOfLessons, FeatureFlag, "
+                String sql = "SELECT SubjectID, SubjectCategoryID, Title, NumberOfLessons, FeatureFlag, "
                         + "Thumbnail, Owner, BriefInfo, Status "
                         + "FROM Subjects";
 
@@ -62,7 +65,7 @@ public class SubjectDAO implements Serializable {
                     int subjectID = rs.getInt("SubjectID");
                     int categoryID = rs.getInt("SubjectCategoryID");
                     String subjectTitle = rs.getString("Title");
-                    int numOfLessons = rs.getInt("NumOfLessons");
+                    int numOfLessons = rs.getInt("NumberOfLessons");
                     String thumbnail = rs.getString("Thumbnail");
                     String ownerID = rs.getString("Owner");
                     String briefInfo = rs.getString("BriefInfo");
@@ -273,5 +276,83 @@ public class SubjectDAO implements Serializable {
             }    
         }
         return resultList;
+    }
+    public int getNumberOfSubject() throws NamingException, SQLException{
+        Connection con = null;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+        int num = 0;
+        try{
+                //1.Connect DB
+            con = DBHelpers.makeConnection();
+            if(con!=null){
+                //2.Create SQL String
+                String sql = "Select COUNT (SubjectID) " 
+                            + "From Subjects " ;
+                            
+                //3.Create Statement Object and assign Parameter value if any
+               stm = con.prepareStatement(sql);
+               
+               rs = stm.executeQuery();
+               if (rs.next()){
+                num = rs.getInt(1);
+                }
+            }//end if it is existed
+            //end if connection is opened
+         
+        }finally{
+            if(rs!=null){
+                rs.close();
+            }
+            if(stm!=null){
+                stm.close();
+            }   
+            if(con!=null){
+                con.close();
+            }
+        }
+        return num;
+    }
+    public ArrayList<StatisDTO> getTop5PopularSubject(Date from, Date to) throws NamingException, SQLException{
+        Connection con = null;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+        ArrayList<StatisDTO> list = null;
+        
+        try{
+                //1.Connect DB
+            con = DBHelpers.makeConnection();
+            if(con!=null){
+                //2.Create SQL String
+                String sql = "Select TOP 5 SubjectID,  COUNT(RegistrationID) AS 'RegistrationTime' "
+                + "From Registration "
+                + "Where RegistrationTime Between ? and ? "
+                + "Group By SubjectID "
+                + "ORDER BY  'RegistrationTime'  DESC   ,SubjectID ";    
+                //3.Create Statement Object and assign Parameter value if any
+               stm = con.prepareStatement(sql);
+               stm.setDate(1, from );
+               stm.setDate(2, to);
+               rs = stm.executeQuery();
+               list = new ArrayList<>();
+               while (rs.next()){
+                int registrationID = rs.getInt("SubjectID");
+                int registrationTime = rs.getInt("RegistrationTime");
+                StatisDTO dto = new StatisDTO(0, 0, 0, registrationID, registrationTime);
+                list.add(dto);
+            }//end if it is existed
+            }//end if connection is opened
+        }finally{
+            if(rs!=null){
+                rs.close();
+            }
+            if(stm!=null){
+                stm.close();
+            }   
+            if(con!=null){
+                con.close();
+            }
+        }
+        return list; 
     }
 }

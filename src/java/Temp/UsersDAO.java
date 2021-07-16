@@ -1,4 +1,18 @@
-package DAO.User;
+package Temp;
+
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
 
 import DTO.User.UserDTO;
 import java.io.Serializable;
@@ -7,12 +21,17 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import javax.naming.NamingException;
-import utils.DBHelpers;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
+import javax.naming.NamingException;
+import utils.DBHelpers;
 
-public class UserDAO implements Serializable {
+/**
+ *
+ * @author ADMIN
+ */
+public class UsersDAO implements Serializable {
 
     private Connection con = null;
     private PreparedStatement stm = null;
@@ -28,12 +47,84 @@ public class UserDAO implements Serializable {
         if (con != null) {
             con.close();
         }
-    }    
+    }
 
+    public UsersDAO() throws NamingException, SQLException {
+        getAllUsers();
+    }
     private List<UserDTO> userList = new ArrayList<>();
 
     public List<UserDTO> getUserList() {
         return userList;
+    }
+
+    public String getUserID(String email) throws NamingException, SQLException {
+        Connection con = null;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+
+        try {
+            //1.Connect DB
+            con = DBHelpers.makeConnection();
+            if (con != null) {
+                //2.Create SQL String
+                String sql = "Select UserID "
+                        + "From Users "
+                        + "Where Email = ?";
+                //3.Create Statement Object and assign Parameter value if any
+                stm = con.prepareStatement(sql);
+                stm.setString(1, email);
+                rs = stm.executeQuery();
+                if (rs.next()) {
+                    email = rs.getString("userid");
+                }
+
+            }//end if it is existed
+            //end if connection is opened
+
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (stm != null) {
+                stm.close();
+            }
+            if (con != null) {
+                con.close();
+            }
+        }
+        return email;
+    }
+
+    public boolean checkExistUserEmail(String email) throws SQLException, NamingException {
+        Connection con = null;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+        try {
+            con = DBHelpers.makeConnection();
+            if (con != null) {
+                String sql = "Select Email "
+                        + "From Users "
+                        + "Where Email = ? ";
+                stm = con.prepareStatement(sql);
+                stm.setString(1, email);
+                rs = stm.executeQuery();
+                if (rs.next()) {
+                    return true;
+                }
+            }
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (stm != null) {
+                stm.close();
+            }
+            if (con != null) {
+                con.close();
+            }
+        }
+        return false;
     }
 
     public UserDTO getCurrUserByEmail(String email) {
@@ -63,15 +154,15 @@ public class UserDAO implements Serializable {
         return "";
     }
 
-    public List<UserDTO> getAllExperts() 
+    public List<UserDTO> getAllExperts()
             throws NamingException, SQLException {
         List<UserDTO> resultList = new ArrayList<>();
         try {
             con = DBHelpers.makeConnection();
             if (con != null) {
                 String sql = "SELECT Email, UserID, Fullname, Password, CreateDate, Status "
-                       + "FROM Users "
-                       + "WHERE Role = ?";
+                        + "FROM Users "
+                        + "WHERE Role = ?";
                 stm = con.prepareStatement(sql);
                 stm.setString(1, "expert");
                 rs = stm.executeQuery();
@@ -86,7 +177,7 @@ public class UserDAO implements Serializable {
 
                     resultList.add(new UserDTO(email, userID, role, fullName, password, status, createDate));
                 }
-            }                        
+            }
         } finally {
             closeConnection();
         }
@@ -129,15 +220,30 @@ public class UserDAO implements Serializable {
                 //2. Create SQL String
                 String sql = "INSERT INTO "
                         + "UserProfile(Email, Avatar, Gender, Mobile, Address) "
-                        + "VALUES(?, ?, ?, ?, ?, ?) ";
+                        + "VALUES(?, ?, ?, ?, ?) ";
                 //3. Create statement and assign parameter value if any
                 stm = con.prepareStatement(sql);
                 stm.setString(1, Email);
-                stm.setString(2, Avatar);
-                stm.setString(3, Gender);
-                stm.setString(4, Mobile);
-                stm.setString(5, Address);
-
+                if (Avatar == null) {
+                    stm.setNull(2, Types.VARCHAR);
+                } else {
+                    stm.setString(2, Avatar);
+                }
+                if (Gender == null) {
+                    stm.setNull(3, Types.VARCHAR);
+                } else {
+                    stm.setString(3, Gender);
+                }
+                if (Mobile == null) {
+                    stm.setNull(4, Types.VARCHAR);
+                } else {
+                    stm.setString(4, Mobile);
+                }
+                if (Address == null) {
+                    stm.setNull(5, Types.VARCHAR);
+                } else {
+                    stm.setString(5, Address);
+                }
                 //4. Execute query
                 int rowAffect = stm.executeUpdate();
                 //5. Process result
@@ -184,6 +290,17 @@ public class UserDAO implements Serializable {
 
     }
 
+    public String getNextUserID() {
+        String nextUserIDPrefix = "ID";
+        String numberPart = String.valueOf(userList.size());
+
+        while (numberPart.length() < 8) {
+            numberPart = "0" + numberPart;
+        }
+
+        return nextUserIDPrefix + numberPart;
+    }
+
     public void getAllUsers()
             throws NamingException, SQLException {
         userList = new ArrayList<>();
@@ -195,6 +312,7 @@ public class UserDAO implements Serializable {
                 stm = con.prepareStatement(sql);
                 rs = stm.executeQuery();
                 while (rs.next()) {
+
                     String email = rs.getString("Email");
                     String userID = rs.getString("UserID");
                     String role = rs.getString("Role");
@@ -202,7 +320,7 @@ public class UserDAO implements Serializable {
                     String password = rs.getString("Password");
                     boolean status = rs.getBoolean("Status");
                     Date date = rs.getDate("CreateDate");
-                    
+
                     userList.add(new UserDTO(email, userID, role, fullname, password, status, date));
                 }
             }
@@ -212,6 +330,7 @@ public class UserDAO implements Serializable {
     }
 
     public void searchUserEmail(String searchValue) throws NamingException, SQLException {
+        userList = new ArrayList<>();
         Connection con = null;
         PreparedStatement stm = null;
         ResultSet rs = null;
@@ -253,3 +372,4 @@ public class UserDAO implements Serializable {
         }
     }
 }
+

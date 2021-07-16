@@ -6,7 +6,7 @@
 package Servlet.User;
 
 
-import DAO.User.UserProfileDAO;
+import Temp.UserProfileDAO;
 import java.io.IOException;
 import java.sql.SQLException;
 import javax.naming.NamingException;

@@ -3,11 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package DAO.Quiz;
+package DAO.Question;
 
 import DTO.Question.QuestionDTO;
-import DTO.Quiz.QuizQuestionDTO;
-import utils.DBHelpers;
+import DTO.Question.QuizQuestionDTO;
 import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -17,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import javax.naming.NamingException;
+import utils.DBHelpers;
 
 /**
  *
@@ -46,6 +46,7 @@ public class QuizQuestionDAO implements Serializable {
         List<QuestionDTO> hard = new ArrayList();
         List<QuestionDTO> medium = new ArrayList();
         List<QuestionDTO> easy = new ArrayList();
+        newQuizQuestion = new ArrayList();
 
         for (QuestionDTO question : questions) { //distinguish question level
             if (question.getLevel().equals("hard")) {
@@ -63,9 +64,11 @@ public class QuizQuestionDAO implements Serializable {
             int hardNo = (int) (number * 0.20);
             int mediumNo = (int) (number * 0.35);
             int easyNo = number - hardNo - mediumNo;
+            
             if (hard.size() < hardNo || medium.size() < mediumNo || easy.size() < easyNo) {
                 return false;
             }
+
             copyQuestion(hard, hardNo, quizID);
             copyQuestion(medium, mediumNo, quizID);
             copyQuestion(easy, easyNo, quizID);
@@ -76,9 +79,11 @@ public class QuizQuestionDAO implements Serializable {
             int hardNo = (int) (number * 0.15);
             int mediumNo = (int) (number * 0.4);
             int easyNo = number - hardNo - mediumNo;
+            
             if (hard.size() < hardNo || medium.size() < mediumNo || easy.size() < easyNo) {
                 return false;
             }
+
             copyQuestion(hard, hardNo, quizID);
             copyQuestion(medium, mediumNo, quizID);
             copyQuestion(easy, easyNo, quizID);
@@ -89,9 +94,11 @@ public class QuizQuestionDAO implements Serializable {
             int hardNo = (int) (number * 0.1);
             int mediumNo = (int) (number * 0.35);
             int easyNo = number - hardNo - mediumNo;
+            
             if (hard.size() < hardNo || medium.size() < mediumNo || easy.size() < easyNo) {
                 return false;
             }
+
             copyQuestion(hard, hardNo, quizID);
             copyQuestion(medium, mediumNo, quizID);
             copyQuestion(easy, easyNo, quizID);
@@ -103,7 +110,6 @@ public class QuizQuestionDAO implements Serializable {
 
     public void copyQuestion(List<QuestionDTO> question, int random, int quizID) { // copy question from list to quiz question
         Random generator = new Random();
-        newQuizQuestion = new ArrayList();
         boolean ok;
         for (int i = 0; i < random; i++) {
             ok = true;
@@ -133,13 +139,13 @@ public class QuizQuestionDAO implements Serializable {
                             + "VALUES (?,?,?,?,?,?,?) ";
 
                     stm = con.prepareStatement(sql);
-                    stm.setInt(2, newQuizQuestion.get(i).getQuizID());
-                    stm.setInt(3, newQuizQuestion.get(i).getQuestionID());
-                    stm.setString(4, newQuizQuestion.get(i).getContent());
-                    stm.setString(5, newQuizQuestion.get(i).getExplanation());
-                    stm.setString(6, newQuizQuestion.get(i).getLevel());
-                    stm.setString(7, newQuizQuestion.get(i).getMediaLink());
-                    stm.setBoolean(8, true);
+                    stm.setInt(1, newQuizQuestion.get(i).getQuizID());
+                    stm.setInt(2, newQuizQuestion.get(i).getQuestionID());
+                    stm.setString(3, newQuizQuestion.get(i).getContent());
+                    stm.setString(4, newQuizQuestion.get(i).getExplanation());
+                    stm.setString(5, newQuizQuestion.get(i).getLevel());
+                    stm.setString(6, newQuizQuestion.get(i).getMediaLink());
+                    stm.setBoolean(7, true);
 
                     row += stm.executeUpdate();
 
@@ -185,22 +191,59 @@ public class QuizQuestionDAO implements Serializable {
             closeConnection();
         }
     }
-
-    public boolean editQuestion(QuizQuestionDTO question) throws NamingException, SQLException {
+    
+    public boolean removeQuestionByNo (int questionNo) throws NamingException, SQLException {
         boolean result = false;
         try {
             con = DBHelpers.makeConnection();
-
             if (con != null) {
-                String sql = "UPDATE QuizQuestion SET content=?, explanation=?, mediaLink=?, status=?"
+                String sql = "DELETE FROM QuizQuestion "
+                        + " WHERE questionNo = ? ";
+                stm = con.prepareStatement(sql);
+                stm.setInt(1, questionNo);
+                int row = stm.executeUpdate();
+                if (row > 0) {
+                    result = true;
+                }
+            }
+        } finally {
+            closeConnection();
+        }
+        return result;
+    }
+    
+    public boolean removeQuestionByQuiz (int quizID) throws NamingException, SQLException {
+        boolean result = false;
+        try {
+            con = DBHelpers.makeConnection();
+            if (con != null) {
+                String sql = "DELETE FROM QuizQuestion "
+                        + " WHERE quizID = ? ";
+                stm = con.prepareStatement(sql);
+                stm.setInt(1, quizID);
+                int row = stm.executeUpdate();
+                if (row > 0) {
+                    result = true;
+                }
+            }
+        } finally {
+            closeConnection();
+        }
+        return result;
+    }
+    
+    public boolean editQuestion(int questionNo, boolean status) throws NamingException, SQLException {
+        boolean result = false;
+        try {
+            con = DBHelpers.makeConnection();
+            
+            if (con != null) {
+                String sql = "UPDATE QuizQuestion SET status=?"
                         + " WHERE questionNo=? ";
                 stm = con.prepareStatement(sql);
-                stm.setString(1, question.getContent());
-                stm.setString(2, question.getExplanation());
-                stm.setString(3, question.getMediaLink());
-                stm.setBoolean(4, question.isStatus());
-                stm.setInt(5, question.getQuestionNo());
-
+                stm.setBoolean(1, status);
+                stm.setInt(2, questionNo);
+                
                 if (stm.executeUpdate() > 0) {
                     result = true;
                 }

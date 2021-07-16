@@ -18,9 +18,7 @@
                         <a data-toggle="tab" href="#search" class="active">Search</a>
                     </li>
                     <li id="anchor-content-tab">
-                        <a data-toggle="tab" href="#content" id="anchor-content"
-                           >Content</a
-                        >
+                        <a data-toggle="tab" href="#content" id="anchor-content">Content</a>
                     </li>
                     <li><a data-toggle="tab" href="#announcement">Announcement</a></li>
                     <li><a data-toggle="tab" href="#overView">OverView</a></li>

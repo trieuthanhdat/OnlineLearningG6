@@ -7,12 +7,12 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-3">
-              
+
                 <div class="sidebar">
 
                     <div class="sidebar-widget">
                         <div class="image">
-                            <a href="https://htmlcodex.com"
+                            <a href="#"
                                ><img src="assets/img/ads-2.jpg" alt="Image"
                                   /></a>
                         </div>

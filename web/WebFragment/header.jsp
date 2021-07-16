@@ -110,6 +110,8 @@
         <link rel="stylesheet" href="assets/css/CourseSlides.css" />
         <!-- w3school.css -->
         <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css" />
+        <!-- SearchCourse css -->
+        <link rel="stylesheet" href="assets/css/SearchCourse.css" />
 
 
         <!--Course Main CSS File -->
@@ -197,14 +199,14 @@
                 <div class="row align-items-center">
                     <div class="col-lg-3 col-md-4">
                         <div class="b-logo">
-                            <a href="welcomePage.jsp">
+                            <a href="WelcomePage">
                                 <img src="assets/img/Logo/Group6LOGO.png" alt="Logo" />
                             </a>
                         </div>
                     </div>
                     <div class="col-lg-9 col-md-4">
                         <div class="b-ads">
-                            <a href="https://htmlcodex.com">
+                            <a href="#">
                                 <img src="assets/img/ads-1.jpg" alt="Ads" />
                             </a>
                         </div>

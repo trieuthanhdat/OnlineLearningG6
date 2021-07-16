@@ -1,8 +1,14 @@
 package Servlet.System;
 
+import DAO.Subject.SubjectCategoryDAO;
+import DAO.Subject.SubjectDAO;
 import DTO.User.UserDTO;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.naming.NamingException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -20,8 +26,8 @@ public class ShowWelcomePageServlet extends HttpServlet {
 
     private final String WELCOME_PAGE = "WelcomePage.jsp";
     private final String HOME_PAGE = "HomePage";
-    private final String DASHBOARD_PAGE = "";    
-    
+    private final String DASHBOARD_PAGE = "";
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -34,22 +40,35 @@ public class ShowWelcomePageServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        
+
         String url = WELCOME_PAGE;
 
         HttpSession session = request.getSession(false);
         if (session != null) {
             UserDTO currUser = (UserDTO) session.getAttribute("CURRENT_USER");
             if (currUser != null) {
-                if (currUser.getRole().equals("student")) {
+                if (currUser.getRole().equals("User")) {
                     url = HOME_PAGE;
                 } else {
                     // to Dashboard Page
                 }
             }
+
         }
         if (url.equals(WELCOME_PAGE)) {
+            try{
             // slides, posts, courses
+            SubjectDAO subdao = new SubjectDAO();
+            SubjectCategoryDAO catedao = new SubjectCategoryDAO();
+            
+            
+            session = request.getSession(true);
+            session.setAttribute("SUBJECT_LIST", subdao.getSubjectsList());
+            session.setAttribute("CATEGORY_LIST", catedao.getSubjectsCategoryList());
+            log(subdao.getSubjectsList().toString());
+            }catch(Exception ex){
+                ex.printStackTrace();
+            }
             RequestDispatcher rd = request.getRequestDispatcher(url);
             rd.forward(request, response);
         } else {

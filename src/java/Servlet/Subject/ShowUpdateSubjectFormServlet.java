@@ -7,7 +7,7 @@ package Servlet.Subject;
 
 import DAO.Subject.SubjectCategoryDAO;
 import DAO.Subject.SubjectDAO;
-import DAO.User.UserDAO;
+import Temp.UsersDAO;
 import DTO.Subject.SubjectCategoryDTO;
 import DTO.Subject.SubjectDTO;
 import DTO.Subject.SubjectDetailsDTO;
@@ -66,7 +66,7 @@ public class ShowUpdateSubjectFormServlet extends HttpServlet {
                         SubjectCategoryDAO categoryDAO = new SubjectCategoryDAO();
                         List<SubjectCategoryDTO> categoryList = categoryDAO.getSubjectsCategoryList();
 
-                        UserDAO userDAO = new UserDAO();
+                        UsersDAO userDAO = new UsersDAO();
                         UserDTO currOwner = userDAO.getCurrUserByID(currSub.getOwnerID());
                         request.setAttribute("OWNER", currOwner);
 

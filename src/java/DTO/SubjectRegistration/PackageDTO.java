@@ -16,7 +16,7 @@ public class PackageDTO implements Serializable{
     private int packageID;
     private int subjectID;
     private String name;
-    private Date accessduration;
+    private int accessduration;
     private boolean status;
     private float  listPrice;
     private float salePrice;
@@ -25,7 +25,7 @@ public class PackageDTO implements Serializable{
     public PackageDTO() {
     }
 
-    public PackageDTO(int packageID, int subjectID, String name, Date accessduration, boolean status, float listPrice, float salePrice, String description) {
+    public PackageDTO(int packageID, int subjectID, String name, int accessduration, boolean status, float listPrice, float salePrice, String description) {
         this.packageID = packageID;
         this.subjectID = subjectID;
         this.name = name;
@@ -67,14 +67,14 @@ public class PackageDTO implements Serializable{
     /**
      * @return the accessduration
      */
-    public Date getAccessduration() {
+    public int getAccessduration() {
         return accessduration;
     }
 
     /**
      * @param accessduration the accessduration to set
      */
-    public void setAccessduration(Date accessduration) {
+    public void setAccessduration(int accessduration) {
         this.accessduration = accessduration;
     }
 

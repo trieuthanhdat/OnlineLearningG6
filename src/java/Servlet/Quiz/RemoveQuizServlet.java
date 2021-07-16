@@ -3,16 +3,16 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Servlet;
+package Servlet.Quiz;
 
 import DAO.Quiz.QuizDAO;
-import DAO.User.UserAnswerDAO;
-import DTO.Quiz.QuizDTO;
-import DTO.User.UserAnswerDTO;
-import DTO.User.UserDTO;
+import DAO.Option.QuizOptionDAO;
+import DAO.Question.QuizQuestionDAO;
+import DTO.Question.QuizQuestionDTO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.naming.NamingException;
@@ -20,15 +20,13 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 /**
  *
  * @author Admin
  */
-public class GetQuizInfoServlet extends HttpServlet {
-    private static final String QUIZ_PAGE = "quiz.jsp";
-    private static final String ERROR = "error.jsp";
+public class RemoveQuizServlet extends HttpServlet {
+    private static final String QUIZ_LIST_PAGE = "QuizList";
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -43,32 +41,28 @@ public class GetQuizInfoServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
-        String url = ERROR;
+        
+        String url = QUIZ_LIST_PAGE;
+        
+        int quizID = Integer.parseInt(request.getParameter("quizID"));
         
         try {
-            HttpSession session = request.getSession(); // Lấy thông tin người dùng và quizID
-            UserDTO user = (UserDTO) session.getAttribute("USER");
-            int quizID = Integer.parseInt(request.getParameter("quizID"));
+            QuizDAO quiz = new QuizDAO();
+            QuizQuestionDAO question = new QuizQuestionDAO();
+            QuizOptionDAO option = new QuizOptionDAO();
             
-            QuizDAO quizDAO = new QuizDAO();
-            QuizDTO quiz = quizDAO.getQuiz(quizID);
+            quiz.removeQuiz(quizID);
+            question.importQuizQuestion(quizID);
+            List <QuizQuestionDTO> list = question.getQuizQuestionList();
+            question.removeQuestionByQuiz(quizID);
+            option.removeOption(list);
             
-            if (quiz != null){ // check xem quiz có tồn tại hay ko
-                request.setAttribute("QUIZ_INFO", quiz);
-                url = QUIZ_PAGE;
-                UserAnswerDAO userAns = new UserAnswerDAO();
-                UserAnswerDTO Ans = userAns.checkUserAnswerExist(quizID, user.getUserID());
-                
-                if (Ans != null) { // check xem người dùng đã làm quiz hay chưa
-                    request.setAttribute("USER_SCORE", Ans);
-                }
-            }
-            
-        } catch (NamingException ex) {
-            Logger.getLogger(GetQuizInfoServlet.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
-            Logger.getLogger(GetQuizInfoServlet.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(RemoveQuizServlet.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NamingException ex) {
+            Logger.getLogger(RemoveQuizServlet.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
+            response.sendRedirect(url);
             out.close();
         }
     }

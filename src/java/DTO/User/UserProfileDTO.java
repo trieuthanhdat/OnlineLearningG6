@@ -18,18 +18,16 @@ public class UserProfileDTO implements Serializable{
     private String gender;
     private String phone;
     private String address;
-    private Date date;
 
     public UserProfileDTO() {
     }
 
-    public UserProfileDTO(String email, String avartar, String gender, String phone, String address, Date date) {
+    public UserProfileDTO(String email, String avartar, String gender, String phone, String address) {
         this.email = email;
         this.avartar = avartar;
         this.gender = gender;
         this.phone = phone;
         this.address = address;
-        this.date = date;
     }
 
     /**
@@ -102,18 +100,5 @@ public class UserProfileDTO implements Serializable{
         this.address = address;
     }
 
-    /**
-     * @return the date
-     */
-    public Date getDate() {
-        return date;
-    }
 
-    /**
-     * @param date the date to set
-     */
-    public void setDate(Date date) {
-        this.date = date;
-    }
-     
 }

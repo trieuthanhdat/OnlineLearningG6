@@ -3,185 +3,84 @@
 <jsp:include page="WebFragment/PopUpSignInRegister.jsp"></jsp:include>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <!-- Start Slider Area -->
+
 <div class="slider-area">
     <div class="container-fluid p-0">
         <div class="row no-gutters">
             <div class="col-12">
                 <div class="slider-carousel owl-carousel">
-                   
+                    <c:if test="${empty sessionScope.SUBJECT_LIST}">EMPTY</c:if>
+                    <c:if test="${empty sessionScope.CATEGORY_LIST}">EMPTY</c:if>
                         <div class="single-slider slider-bg-1 text-center">
                             <div class="slider-inner">
                                 <h1>Welcome to Online learning</h1>
                                 <h5>
-                                   I learn - I study
+                                    I learn - I study
                                 </h5>
                                 <a class="btn get-started-btn" href="">Get Started</a>
                             </div>
                         </div>
-                   
+
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-<!-- End Slider Area -->
+    <!-- End Slider Area -->
 
-<!-- Start Hire Us Area -->
-<div class="hire-us-area theme-bg js--sticky-menu">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-7 col-md-9 col-12">
-                <div class="hire-us-content">
-                    <h6>
-                        We?ve completed more than <span>100+</span> project for our
-                        amazing clients, If you interested?
-                    </h6>
+    <!-- Start Hire Us Area -->
+    <div class="hire-us-area theme-bg js--sticky-menu">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-7 col-md-9 col-12">
+                    <div class="hire-us-content">
+                        <h6>
+                            We?ve completed more than <span>100+</span> project for our
+                            amazing clients, If you interested?
+                        </h6>
+                    </div>
                 </div>
-            </div>
-            <div class="col-lg-3 col-md-3 offset-lg-2 col-12 text-right">
-                <a class="btn btn-primary" href="#">Hire Us</a>
+                <div class="col-lg-3 col-md-3 offset-lg-2 col-12 text-right">
+                    <a class="btn btn-primary" href="#">Hire Us</a>
+                </div>
             </div>
         </div>
     </div>
-</div>
-<!-- End Hire Us Area -->
+    <!-- End Hire Us Area -->
 
-<!-- Category News Start-->
-<div class="cat-news">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-6">
-                <h2>Sports</h2>
-                <div class="row cn-slider">
-                    <div class="col-md-6">
-                        <div class="cn-img">
-                            <img src="assets/img/news-350x223-1.jpg" />
-                            <div class="cn-title">
-                                <a href="">Lorem ipsum dolor sit</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="cn-img">
-                            <img src="assets/img/news-350x223-2.jpg" />
-                            <div class="cn-title">
-                                <a href="">Lorem ipsum dolor sit</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="cn-img">
-                            <img src="assets/img/news-350x223-3.jpg" />
-                            <div class="cn-title">
-                                <a href="">Lorem ipsum dolor sit</a>
-                            </div>
-                        </div>
+    <!-- Category News Start-->
+    <div class="cat-news">
+        <div class="container">
+            <div class="row">
+            <c:forEach items="${sessionScope.CATEGORY_LIST}" var="catelist">
+                <div class="col-md-6">
+                    <h2>${catelist.categoryName}</h2>
+                    <div class="row cn-slider">
+
+                        <c:forEach items="${sessionScope.SUBJECT_LIST}" var="list" >
+                            <c:if test="${list.subjectCategoryID eq catelist.categoryID}">
+                                <div class="col-md-6">
+                                    <div class="cn-img">
+                                        <img src="assets/img/${list.getThumbnail()}" />
+                                        <div class="cn-title">
+                                            <a href="CourseDetails?txtSubjectID=${list.subjectID}">${list.title}</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </c:if>
+                        </c:forEach>
+
                     </div>
                 </div>
-            </div>
-            <div class="col-md-6">
-                <h2>Technology</h2>
-                <div class="row cn-slider">
-                    <div class="col-md-6">
-                        <div class="cn-img">
-                            <img src="assets/img/news-350x223-4.jpg" />
-                            <div class="cn-title">
-                                <a href="">Lorem ipsum dolor sit</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="cn-img">
-                            <img src="assets/img/news-350x223-5.jpg" />
-                            <div class="cn-title">
-                                <a href="">Lorem ipsum dolor sit</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="cn-img">
-                            <img src="assets/img/news-350x223-1.jpg" />
-                            <div class="cn-title">
-                                <a href="">Lorem ipsum dolor sit</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            </c:forEach>
+        
         </div>
     </div>
 </div>
 <!-- Category News End-->
 
-<!-- Category News Start-->
-<div class="cat-news">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-6">
-                <h2>Business</h2>
-                <div class="row cn-slider">
-                    <div class="col-md-6">
-                        <div class="cn-img">
-                            <img src="assets/img/news-350x223-5.jpg" />
-                            <div class="cn-title">
-                                <a href="">Lorem ipsum dolor sit</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="cn-img">
-                            <img src="assets/img/news-350x223-4.jpg" />
-                            <div class="cn-title">
-                                <a href="">Lorem ipsum dolor sit</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="cn-img">
-                            <img src="assets/img/news-350x223-3.jpg" />
-                            <div class="cn-title">
-                                <a href="">Lorem ipsum dolor sit</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <h2>Entertainment</h2>
-                <div class="row cn-slider">
-                    <div class="col-md-6">
-                        <div class="cn-img">
-                            <img src="assets/img/news-350x223-2.jpg" />
-                            <div class="cn-title">
-                                <a href="">Lorem ipsum dolor sit</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="cn-img">
-                            <img src="assets/img/news-350x223-1.jpg" />
-                            <div class="cn-title">
-                                <a href="">Lorem ipsum dolor sit</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="cn-img">
-                            <img src="assets/img/news-350x223-3.jpg" />
-                            <div class="cn-title">
-                                <a href="">Lorem ipsum dolor sit</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- Category News End-->
 
 <!-- Tab News Start-->
 <div class="tab-news">

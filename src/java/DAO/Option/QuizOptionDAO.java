@@ -3,11 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package DAO.Quiz;
+package DAO.Option;
 
+import DTO.Question.QuizQuestionDTO;
 import DTO.Quiz.QuizOptionDTO;
-import DTO.Quiz.QuizQuestionDTO;
-import utils.DBHelpers;
+import DTO.Question.QuizQuestionDTO;
 import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -16,6 +16,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.naming.NamingException;
+import utils.DBHelpers;
 
 /**
  *
@@ -52,7 +53,7 @@ public class QuizOptionDAO implements Serializable {
                             + " WHERE questionID = ?";
                     stm = con.prepareStatement(sql);
                     stm.setInt(1, quiz.getQuestionID());
-                    
+
                     rs = stm.executeQuery();
                     while (rs.next()) {
                         String content = rs.getString("content");
@@ -67,8 +68,8 @@ public class QuizOptionDAO implements Serializable {
             closeConnection();
         }
     }
-    
-    public boolean exportOption () throws NamingException, SQLException {
+
+    public boolean exportOption() throws NamingException, SQLException {
         boolean result = false;
         int row = 0;
         try {
@@ -95,8 +96,8 @@ public class QuizOptionDAO implements Serializable {
         }
         return result;
     }
-    
-    public void importOption (List<QuizQuestionDTO> questionList) throws NamingException, SQLException {
+
+    public void importOption(List<QuizQuestionDTO> questionList) throws NamingException, SQLException {
         quizOption = new ArrayList();
         try {
             con = DBHelpers.makeConnection();
@@ -106,7 +107,7 @@ public class QuizOptionDAO implements Serializable {
                             + " WHERE questionNo = ?";
                     stm = con.prepareStatement(sql);
                     stm.setInt(1, question.getQuestionNo());
-                    
+
                     rs = stm.executeQuery();
                     while (rs.next()) {
                         int questionNo = rs.getInt("questionNo");
@@ -122,22 +123,23 @@ public class QuizOptionDAO implements Serializable {
             closeConnection();
         }
     }
-    
-    public boolean editOption(QuizOptionDTO option) throws NamingException, SQLException {
+
+    public boolean removeOption(List<QuizQuestionDTO> questions) throws NamingException, SQLException {
         boolean result = false;
+        int row = 0;
         try {
             con = DBHelpers.makeConnection();
-            
+
             if (con != null) {
-                String sql = "UPDATE QuizQuestion SET content=?, optionLetter=?, isCorrect=?"
-                        + " WHERE questionNo=? ";
-                stm = con.prepareStatement(sql);
-                stm.setString(1, option.getContent());
-                stm.setString(2, option.getOptionLetter());
-                stm.setBoolean(3, option.isIsCorrect());
-                stm.setInt(4, option.getQuestionNo());
-                
-                if (stm.executeUpdate() > 0) {
+                for (QuizQuestionDTO items : questions) {
+                    String sql = "DELETE FROM QuizQuestionOption "
+                            + " WHERE questionNo = ? ";
+                    stm = con.prepareStatement(sql);
+                    stm.setInt(1, items.getQuestionNo());
+                    row += stm.executeUpdate();
+                }
+
+                if (row > 0) {
                     result = true;
                 }
             }
@@ -146,10 +148,36 @@ public class QuizOptionDAO implements Serializable {
         }
         return result;
     }
-    
-    public List<QuizOptionDTO> getOption () {
+
+    public boolean removeOptionByQuestionNo(int questionNo) throws NamingException, SQLException {
+        boolean result = false;
+        int row = 0;
+        try {
+            con = DBHelpers.makeConnection();
+
+            if (con != null) {
+                String sql = "DELETE FROM QuizQuestionOption "
+                        + " WHERE questionNo = ? ";
+                stm = con.prepareStatement(sql);
+                stm.setInt(1, questionNo);
+                row += stm.executeUpdate();
+            }
+
+            if (row > 0) {
+                result = true;
+            }
+        } finally {
+            closeConnection();
+        }
+        return result;
+    }
+
+    public List<QuizOptionDTO> getOption() {
         return quizOption;
     }
-    
-    
+
+//    public void importOption(List<QuizQuestionDTO> question) {
+//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+//    }
+
 }

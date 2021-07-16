@@ -3,13 +3,16 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+package Servlet.Quiz;
 
-import DAO.Quiz.QuizDAO;
-import DAO.Quiz.QuizOptionDAO;
-import DAO.Quiz.QuizQuestionDAO;
+import DAO.Question.QuestionDAO;
 import DTO.Question.QuestionDTO;
+import DAO.Quiz.QuizDAO;
 import DTO.Quiz.QuizDTO;
-import DTO.Quiz.QuizQuestionDTO;
+import DTO.Quiz.QuizErrorDTO;
+import DAO.Option.QuizOptionDAO;
+import DAO.Question.QuizQuestionDAO;
+import DTO.Question.QuizQuestionDTO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
@@ -49,6 +52,10 @@ public class MakeQuizServlet extends HttpServlet {
         PrintWriter out = response.getWriter();
 
         String url = ERROR;
+        QuestionDAO questionDAO = new QuestionDAO();
+        QuizQuestionDAO quizQuestionDAO = new QuizQuestionDAO();
+        QuizOptionDAO quizOptionDAO = new QuizOptionDAO();
+        QuizErrorDTO error = new QuizErrorDTO();
 
         int subjectID = Integer.parseInt(request.getParameter("subjectID"));
         String name = request.getParameter("name");
@@ -59,49 +66,81 @@ public class MakeQuizServlet extends HttpServlet {
         int lessonID = Integer.parseInt(request.getParameter("lessonID"));
 
         try {
-            QuizDTO quiz = new QuizDTO(0, subjectID, name, numOfQuestions, duration, passRate, level, false);
+            boolean isError = true;
+            questionDAO.importQuestion(lessonID);//lấy question thuộc lesson đó ra
+            List<QuestionDTO> question = questionDAO.getQuestion();
 
-            QuizDAO quizDAO = new QuizDAO();
-            boolean result1 = quizDAO.createQuiz(quiz);// tạo quiz
-            int quizID = quizDAO.getQuizListSize(); // query lại để lấy quizID
+            if (name.length() < 5 || name.length() > 50) { // name qúa ngắn hay quá dài
+                error.setInvalidQuizName("Name must be 5-50 characters");
+                isError = false;
+            }
 
-          if (result1) {//tạo thành công copy question
-                QuestionDAO questionDAO = new QuestionDAO(); //lấy question thuộc lesson đó ra
-                questionDAO.importQuestion(lessonID);
-                List<QuestionDTO> question = questionDAO.getQuestion();
+            if (question.size() < numOfQuestions) { // Nếu số lượng câu hỏi không khớp với lại số lượng yêu cầu
+                error.setQuestionShortage("Not enough question. Please add more!");
+                isError = false;
+            }
 
-                if (question.size() >= numOfQuestions) { // Nếu số lượng câu hỏi khớp với lại số lượng yêu cầu
-                    QuizQuestionDAO quizQuestionDAO = new QuizQuestionDAO(); //truyền vào quiz để phân loại và copy
+            if (quizQuestionDAO.randomQuestion(question, level, numOfQuestions, 0) == false) { // Nếu số lượng câu theo level được đảm bảo
+                error.setQuestionLevelShortage("Not enough question for that level");
+                isError = false;
+            }
+            
+            if (passRate > 80 || passRate < 50) {// pass rate vô lí
+                error.setUnreasonablePassRate("Pass rate must not lower than 50% and higher than 80%");
+                isError = false;
+            }
+            
+            if (isError) {
+                QuizDTO quiz = new QuizDTO(0, subjectID, name, numOfQuestions, duration, passRate, level, false);
+
+                QuizDAO quizDAO = new QuizDAO();
+                boolean result1 = quizDAO.createQuiz(quiz);// tạo quiz
+                int quizID = quizDAO.getQuizListSize(); // query lại để lấy quizID
+
+                if (result1) {//tạo thành công copy question
+                    //truyền vào quiz để phân loại và copy
                     boolean result2 = quizQuestionDAO.randomQuestion(question, level, numOfQuestions, quizID);
-                    
+
                     if (result2) {// random ko thiếu câu nào
                         boolean result3 = quizQuestionDAO.exportQuizQuestion();
                         quizQuestionDAO.importQuizQuestion(quizID); //query lại để lấy questionNo
                         List<QuizQuestionDTO> quizQuestion = quizQuestionDAO.getQuizQuestionList();
 
                         if (result3) {// nếu câu hỏi được thêm vào thành công, lấy option theo từng câu hỏi
-                            QuizOptionDAO quizOptionDAO = new QuizOptionDAO();
                             quizOptionDAO.getQuizOption(quizQuestion);
                             boolean result4 = quizOptionDAO.exportOption();
-                            
+
                             if (result4) {
                                 url = QUIZ_LIST_PAGE;
+                            } else {
+                                quizDAO.removeQuiz(quizID);
+                                quizQuestionDAO.removeQuestionByQuiz(quizID);
+                                quizOptionDAO.removeOption(quizQuestion);
+                                error.setCreateError("Some issue happen and prevent quiz from being create");
+                                request.setAttribute("Create_Quiz_Error", error);
                             }
+                        } else {
+                            quizDAO.removeQuiz(quizID);
+                            quizQuestionDAO.removeQuestionByQuiz(quizID);
+                            error.setCreateError("Some issue happen and prevent quiz from being create");
+                            request.setAttribute("Create_Quiz_Error", error);
                         }
-                    } else {// báo thiếu question ở level đó
-                        
+                    } else {
+                        quizDAO.removeQuiz(quizID);
+                        error.setCreateError("Some issue happen and prevent quiz from being create");
+                        request.setAttribute("Create_Quiz_Error", error);
                     }
-
-                } else { // thông báo ko đủ quiz trong bank 
-
                 }
+            } else {
+                request.setAttribute("Create_Quiz_Error", error);
             }
+
         } catch (NamingException ex) {
             Logger.getLogger(MakeQuizServlet.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
             Logger.getLogger(MakeQuizServlet.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
-            response.sendRedirect(url);
+            request.getRequestDispatcher(url).forward(request, response);
             out.close();
         }
     }

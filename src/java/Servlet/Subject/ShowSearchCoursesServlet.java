@@ -28,7 +28,7 @@ import javax.servlet.http.HttpServletResponse;
 public class ShowSearchCoursesServlet extends HttpServlet {
 
     private final String WELCOME_PAGE = "WelcomePage";    
-    private final String SEARCH_COURSES_PAGE = "SearchCourses.jsp";    
+    private final String SEARCH_COURSES_PAGE = "SearchedCourses.jsp";    
     
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -69,7 +69,7 @@ public class ShowSearchCoursesServlet extends HttpServlet {
             url = SEARCH_COURSES_PAGE;
             
         } catch (NamingException | SQLException ex) {
-            log(ex.toString());
+           ex.printStackTrace();
         } finally {
             if (url.equals(WELCOME_PAGE)) {
                 response.sendRedirect(url);

@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-import DAO.User.UserProfileDAO;
+import Temp.UserProfileDAO;
 import DTO.User.UserProfileDTO;
 import java.io.IOException;
 import java.io.PrintWriter;

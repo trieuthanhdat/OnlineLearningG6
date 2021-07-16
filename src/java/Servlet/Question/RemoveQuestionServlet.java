@@ -3,12 +3,17 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Servlet;
+package Servlet.Question;
 
+import DAO.Option.QuizOptionDAO;
+import DAO.Question.QuizQuestionDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.naming.NamingException;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -17,8 +22,8 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Admin
  */
-@WebServlet(name = "SaveAnswerServlet", urlPatterns = {"/SaveAnswerServlet"})
-public class SaveAnswerServlet extends HttpServlet {
+public class RemoveQuestionServlet extends HttpServlet {
+    private static final String QUIZ_QUESTION_LIST = "QuizQuestionList";
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -32,17 +37,27 @@ public class SaveAnswerServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet SaveQuestionServlet</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet SaveQuestionServlet at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+        PrintWriter out = response.getWriter();
+        
+        String url = QUIZ_QUESTION_LIST;
+        
+        int questionNo = Integer.parseInt(request.getParameter("questionNo"));
+        
+        try {
+            QuizQuestionDAO question = new QuizQuestionDAO();
+            QuizOptionDAO option = new QuizOptionDAO();
+            
+            boolean result = question.removeQuestionByNo(questionNo);
+            if (result){
+                boolean result2 = option.removeOptionByQuestionNo(questionNo);
+            }
+        } catch (NamingException ex) {
+            Logger.getLogger(RemoveQuestionServlet.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(RemoveQuestionServlet.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            response.sendRedirect(url);
+            out.close();
         }
     }
 

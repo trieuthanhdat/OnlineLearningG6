@@ -6,7 +6,6 @@
 package DAO.Quiz;
 
 import DTO.Quiz.QuizDTO;
-import utils.DBHelpers;
 import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -16,6 +15,7 @@ import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 import javax.naming.NamingException;
+import utils.DBHelpers;
 
 /**
  *
@@ -47,15 +47,15 @@ public class QuizDAO implements Serializable{
             con = DBHelpers.makeConnection();
             if (con != null) {
                 String sql = "INSERT INTO Quiz(subjectID, name, numOfQuestions, duration, passRate, level, status) "
-                        + " VALUES(?,?,?,?,?,?,?,?) ";
+                        + " VALUES(?,?,?,?,?,?,?) ";
                 stm = con.prepareStatement(sql);
-                stm.setInt(2, quiz.getSubjectID());
-                stm.setString(3, quiz.getName());
-                stm.setInt(4, quiz.getNumOfQuestions());
-                stm.setTime(5, quiz.getDuration());
-                stm.setDouble(6, quiz.getPassRate());
-                stm.setString(7, quiz.getLevel());
-                stm.setBoolean(8, quiz.isStatus());
+                stm.setInt(1, quiz.getSubjectID());
+                stm.setString(2, quiz.getName());
+                stm.setInt(3, quiz.getNumOfQuestions());
+                stm.setTime(4, quiz.getDuration());
+                stm.setDouble(5, quiz.getPassRate());
+                stm.setString(6, quiz.getLevel());
+                stm.setBoolean(7, quiz.isStatus());
                 
                 int row = stm.executeUpdate();
                 
@@ -131,4 +131,54 @@ public class QuizDAO implements Serializable{
         }
          return quiz.size();
     }
+    
+    public boolean removeQuiz (int quizID) throws NamingException, SQLException {
+        boolean result = false;
+        try {
+            con = DBHelpers.makeConnection();
+            
+            if (con != null) {
+                String sql = "DELETE FROM Quiz "
+                        + " WHERE quizID = ?";
+                stm = con.prepareStatement(sql);
+                stm.setInt(1, quizID);
+                
+                int row = stm.executeUpdate();
+                
+                if (row > 0) {
+                    result = true;
+                }
+            }
+        } finally {
+            closeConnection();
+        }
+        return result;
+    }
+    
+    public boolean editQuiz (QuizDTO quiz) throws NamingException, SQLException {
+        boolean result = false;
+        try {
+            con = DBHelpers.makeConnection();
+            
+            if (con != null) {
+                String sql = "UPDATE Quiz SET name=?, duration=?, passRate=? "
+                        + " WHERE quizID = ?";
+                stm = con.prepareStatement(sql);
+                stm.setString(1, quiz.getName());
+                stm.setTime(2, quiz.getDuration());
+                stm.setDouble(3, quiz.getPassRate());
+                stm.setInt(4, quiz.getQuizID());
+                
+                int row = stm.executeUpdate();
+                
+                if (row > 0) {
+                    result = true;
+                }
+            }
+        } finally {
+            closeConnection();
+        }
+        return result;
+    }
+    
 }

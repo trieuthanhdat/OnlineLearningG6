@@ -3,33 +3,35 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Servlet;
+package Servlet.Quiz;
 
-import DAO.Quiz.QuizOptionDAO;
-import DAO.Quiz.QuizQuestionDAO;
+import DTO.User.UserDTO;
+import DTO.Answer.AnswerDTO;
+import DTO.Quiz.QuizDTO;
 import DTO.Quiz.QuizOptionDTO;
-import DTO.Quiz.QuizQuestionDTO;
+import DTO.Question.QuizQuestionDTO;
+import DAO.Answer.UserAnswerDAO;
+import DTO.Answer.UserAnswerDTO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.naming.NamingException;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
  * @author Admin
  */
-@WebServlet(name = "GetQuizQuestionServlet", urlPatterns = {"/GetQuizQuestionServlet"})
-public class GetQuizQuestionServlet extends HttpServlet {
-    private final static String TAKE_QUIZ = "quiz.jsp";
-    private final static String QUESTION_NOT_FOUND = "error.jsp";
+public class ShowResultServlet extends HttpServlet {
+    private final static String QUIZ_INFO_PAGE = "QuizHandle";
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -45,31 +47,32 @@ public class GetQuizQuestionServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
         
-        String url = QUESTION_NOT_FOUND;
-        int QuizID = Integer.parseInt(request.getParameter("quizID"));
+        String url = QUIZ_INFO_PAGE;
+        
+        HttpSession session = request.getSession();
+        UserDTO user = (UserDTO) session.getAttribute("USER");
+        QuizDTO quiz = (QuizDTO) session.getAttribute("QUIZ_INFO");
+        List<QuizOptionDTO> option = (List<QuizOptionDTO>) session.getAttribute("QUIZ_QUESTION_OPTION");
+        List<AnswerDTO> answer = (List<AnswerDTO>) session.getAttribute("AnswerList");
         
         try {
-            QuizQuestionDAO dao1 = new QuizQuestionDAO();
-            dao1.importQuizQuestion(QuizID);
-            List<QuizQuestionDTO> question = dao1.getQuizQuestionList();
-            
-            QuizOptionDAO dao2 = new QuizOptionDAO();
-            dao2.importOption(question);
-            List<QuizOptionDTO> option = dao2.getOption();
-            
-            if (question != null && option != null) {
-                request.setAttribute("QUIZ_QUESTION", question);
-                request.setAttribute("QUIZ_QUESTION_OPTION", option);
-                url = TAKE_QUIZ;
+            double point = 10/quiz.getNumOfQuestions();
+            UserAnswerDAO dao = new UserAnswerDAO();
+            List<AnswerDTO> rightAnswer = dao.copyAnswer(option, point);
+            double score = dao.compareAnswer(answer, rightAnswer);
+            String answerString = dao.createString(answer);
+            UserAnswerDTO userAnswer = new UserAnswerDTO(user.getUserID(), quiz.getQuizID(), (ArrayList<AnswerDTO>) answer, score);
+            boolean result = dao.saveToServer(userAnswer, answerString);
+            if (result) {
+                session.setAttribute("USER_SCORE", userAnswer);
             }
             
         } catch (NamingException ex) {
-            Logger.getLogger(GetQuizQuestionServlet.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ShowResultServlet.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
-            Logger.getLogger(GetQuizQuestionServlet.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ShowResultServlet.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
-            request.getRequestDispatcher(url).forward(request, response);
-            out.close();
+            response.sendRedirect(url);
         }
     }
 

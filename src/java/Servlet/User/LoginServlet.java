@@ -5,7 +5,8 @@
  */
 package Servlet.User;
 
-import DAO.User.UserDAO;
+
+import Temp.UsersDAO;
 import DTO.User.UserDTO;
 import java.io.IOException;
 import java.sql.SQLException;
@@ -45,12 +46,13 @@ public class LoginServlet extends HttpServlet {
             String email = request.getParameter("txtEmail");
             String password = request.getParameter("txtPassword");
             log("LoginServlet: " + email + " - " + password);            
-            UserDAO dao = new UserDAO();
+            UsersDAO dao = new UsersDAO();
             UserDTO result = dao.checkLogin(email, password);            
             if (result != null) {
                 url = LOGGED_IN_PAGE;                
                 HttpSession session = request.getSession();
                 session.setAttribute("CURRENT_USER", result);
+                log(result.getPassword());
             }
             log(url);
         } catch (NamingException ex) {

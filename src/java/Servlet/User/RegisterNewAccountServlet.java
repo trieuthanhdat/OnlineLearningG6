@@ -37,10 +37,10 @@ import utils.NewAccount;
 public class RegisterNewAccountServlet extends HttpServlet {
 
     private final String WELCOME_PAGE = "WelcomePage";
-    private final String VALIDATION_PAGE = "WelcomePage";
+    private final String VALIDATION_PAGE = "AccountConfirmation";
     private final int VALIDATION_NUM_SIZE = 6;
     private final long AVAILABLE_TIME_LIMIT_FOR_NEW_ACCOUNT = 300000; //300000 millisecs = 5 minutes
-    
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -53,9 +53,9 @@ public class RegisterNewAccountServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        
+
         String url = WELCOME_PAGE;
-        
+
         try {
             String email = request.getParameter("txtEmail");
             String password = request.getParameter("txtPassword");
@@ -82,29 +82,31 @@ public class RegisterNewAccountServlet extends HttpServlet {
                         String currPassword = newAccountInfo[1];
                         String currFullname = newAccountInfo[2];
                         String validationNums = newAccountInfo[3];
-                        LocalDateTime createTime = new LocalDateTimeStringConverter().fromString(newAccountInfo[3]);                        
-                        
-                        currAcc = new NewAccount(email, password, fullName, validationNums, createTime);
+                             LocalDateTime createTime = LocalDateTime.parse(newAccountInfo[4]);
+
+                        currAcc = new NewAccount(currEmail, currPassword, currFullname, validationNums, createTime);
                         pendingAccs.add(currAcc);
                     }
                 }
-                br.close(); fr.close();
+                br.close();
+                fr.close();
                 // remove expired pending new account
                 Iterator<NewAccount> accIte = pendingAccs.iterator();
                 boolean duplicateInFile = false;
-                while(accIte.hasNext()) {
-                    currAcc = accIte.next();                
-                    if (currAcc.getEmail().equals(email)) {                    
+                while (accIte.hasNext()) {
+                    currAcc = accIte.next();
+                    if (currAcc.getEmail().equals(email)) {
                         duplicateInFile = true;
                         //url = ?
-                    } 
+                    }
                     // check if create time is invalid then remove pending accs (under 5 minutes since create pending new account)                    
                     ZonedDateTime zdt = currAcc.getCreateTime().atZone(ZoneId.of("Asia/Ho_Chi_Minh"));
                     long createTimeInMilli = zdt.toInstant().toEpochMilli();
-                    if ((System.currentTimeMillis() - createTimeInMilli) <= 0 &&
-                        (System.currentTimeMillis() - createTimeInMilli) > AVAILABLE_TIME_LIMIT_FOR_NEW_ACCOUNT) {      
+                    if ((System.currentTimeMillis() - createTimeInMilli) <= 0
+                            && (System.currentTimeMillis() - createTimeInMilli) > AVAILABLE_TIME_LIMIT_FOR_NEW_ACCOUNT) {
                         accIte.remove();
-                    }      
+                        log("Acc deleted");
+                    }
                 }
                 // no duplicate in both file and database then add the new account to the list
                 if (!duplicateInFile) {
@@ -112,10 +114,11 @@ public class RegisterNewAccountServlet extends HttpServlet {
                     String validationNums = "";
                     for (int i = 0; i < VALIDATION_NUM_SIZE; i++) {
                         validationNums += String.valueOf(rd.nextInt(10));
-                    }                
-
-                    currAcc = new NewAccount(email, password, fullName, validationNums, LocalDateTime.now());
-                    pendingAccs.add(currAcc);
+                    }
+                   
+                    NewAccount acc = new NewAccount(email, password, fullName, validationNums, LocalDateTime.now());
+                    
+                    pendingAccs.add(acc);
                     Mail.SendEmail(email, validationNums);
 
                     url = VALIDATION_PAGE;
@@ -127,16 +130,18 @@ public class RegisterNewAccountServlet extends HttpServlet {
                 BufferedWriter bw = new BufferedWriter(osw);
 
                 for (NewAccount acc : pendingAccs) {
-                    bw.write(acc.getEmail() + "~" + acc.getPassword() + "~" + acc.getValidationNums() + "~" + acc.getFullName()
-                              + "~" + acc.getCreateTime().toString());
+                    bw.write(acc.getEmail() + "~" + acc.getPassword() + "~" + acc.getFullName() + "~" + acc.getValidationNums()
+                            + "~" + acc.getCreateTime().toString());
                     bw.newLine();
-                } 
-                bw.close(); osw.close(); fos.close();                                      
-            } 
+                }
+                bw.close();
+                osw.close();
+                fos.close();
+            }
             response.sendRedirect(url);
         } catch (MessagingException ex) {
             log(ex.toString());
-        }        
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

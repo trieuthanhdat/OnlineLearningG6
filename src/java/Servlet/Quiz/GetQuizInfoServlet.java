@@ -6,10 +6,10 @@
 package Servlet.Quiz;
 
 import DAO.Quiz.QuizDAO;
-import DAO.User.UserAnswerDAO;
 import DTO.Quiz.QuizDTO;
-import DTO.User.UserAnswerDTO;
 import DTO.User.UserDTO;
+import DTO.User.UserAnswerDTO;
+import Temp.UserAnswerDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
@@ -43,6 +43,7 @@ public class GetQuizInfoServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
+        
         String url = ERROR;
         
         try {
@@ -54,13 +55,13 @@ public class GetQuizInfoServlet extends HttpServlet {
             QuizDTO quiz = quizDAO.getQuiz(quizID);
             
             if (quiz != null){ // check xem quiz có tồn tại hay ko
-                request.setAttribute("QUIZ_INFO", quiz);
+                session.setAttribute("QUIZ_INFO", quiz);
                 url = QUIZ_PAGE;
                 UserAnswerDAO userAns = new UserAnswerDAO();
                 UserAnswerDTO Ans = userAns.checkUserAnswerExist(quizID, user.getUserID());
                 
                 if (Ans != null) { // check xem người dùng đã làm quiz hay chưa
-                    request.setAttribute("USER_SCORE", Ans);
+                    session.setAttribute("USER_SCORE", Ans);
                 }
             }
             
@@ -69,6 +70,7 @@ public class GetQuizInfoServlet extends HttpServlet {
         } catch (SQLException ex) {
             Logger.getLogger(GetQuizInfoServlet.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
+            response.sendRedirect(url);
             out.close();
         }
     }
