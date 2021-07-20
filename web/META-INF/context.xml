@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Context path="/OnlineLearningG6">
+    <Resource name="OLS" auth="Container" type="javax.sql.DataSource"
+            driverClassName="com.microsoft.sqlserver.jdbc.SQLServerDriver"
+            url="jdbc:sqlserver://localhost:1433;databaseName=OnlineLearningG6"
+            username="sa" password="thanhdat"/>
+</Context>
+

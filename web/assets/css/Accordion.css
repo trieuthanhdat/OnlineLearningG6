@@ -1,0 +1,150 @@
+.panel-title {
+    position: relative;
+}
+
+.panel-title::after {
+    content: "\f107";
+    color: #333;
+    top: -2px;
+    right: 0px;
+    position: absolute;
+    font-family: "FontAwesome";
+}
+
+.panel-title[aria-expanded="true"]::after {
+    content: "\f106";
+}
+
+/*
+   * Added 12-27-20 to showcase full title clickthrough
+   */
+
+.panel-heading-full.panel-heading {
+    padding: 0;
+}
+
+.panel-heading-full .panel-title {
+    padding: 10px 15px;
+}
+
+.panel-heading-full .panel-title::after {
+    top: 10px;
+    right: 15px;
+}
+
+/* left panel accordion */
+body {
+    background: #f9f9f9;
+}
+
+.myaccordion {
+    box-shadow: 0 0 1px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.2s ease-in-out;
+}
+
+.myaccordion .card,
+.myaccordion .card:last-child .card-header {
+    border: none;
+}
+
+.myaccordion .card-header {
+    border-bottom-color: #edeff0;
+    background: transparent;
+}
+
+.myaccordion .fa-stack {
+    font-size: 12px;
+}
+
+.myaccordion .btn {
+    width: 100%;
+    font-weight: bold;
+    color: #004987;
+    padding: 0;
+}
+.myaccordion .btn-link:hover,
+.myaccordion .btn-link:focus {
+    text-decoration: none;
+}
+
+.myaccordion li + li {
+    margin-top: 10px;
+}
+/* ENND Accordion style */
+
+.mb-0 .btn-link {
+    background: none;
+    color: black;
+    border: none;
+    font-size: large;
+    font-weight: bold;
+}
+.mb-0 .btn-link:hover,
+.mb-0 .btn-link:active {
+    background: none;
+    color: black;
+}
+#accordion .card {
+    background: none;
+    border: none;
+}
+#accordion .card .card-header {
+    background: none;
+}
+
+.card-body .list-group-item {
+    background: none;
+    border: none;
+}
+.mb-0 button {
+    width: 100%;
+    text-align: left;
+}
+
+.myaccordion.hidePanel {
+    width: 0;
+    display: none;
+    box-shadow: 0 0 1px rgba(0, 0, 0, 0.3);
+    transition: width 0.2s;
+}
+@media (max-width: 768px) {
+    .myaccordion {
+        width: 50%!important;
+        margin: 0 0 0 -250px;
+        display: block;
+        z-index: 1;
+        background: #000000b0;
+        color: white;
+        position: fixed!important;
+        left: 72vh;
+        top: 5vh;
+        height: 100vh;
+        transition: width 0.2s;
+    }
+    .mb-0 .btn-link {
+        color: white;
+    }
+    .myaccordion .fa-stack {
+        color: black;
+    }
+    .custom-control-label {
+        color: white;
+    }
+    .hidePanel {
+        width: 0;
+        background: none;
+        display: none;
+        position: relative;
+    }
+}
+/* ======Pagination ======= */
+.pagination .page-item .page-link {
+    width: fit-content;
+    height: fit-content;
+    background: black;
+    color: white;
+}
+.pagination .page-item .page-link:hover {
+    color: #d62300;
+    background: white;
+}

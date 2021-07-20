@@ -1,0 +1,183 @@
+/* Style the buttons that are used to open and close the accordion panel */
+.accordion {
+    background-color: #eee;
+    color: #444;
+    cursor: pointer;
+    padding: 18px;
+    width: 100%;
+    text-align: left;
+    border: none;
+    outline: none;
+    transition: 0.4s;
+}
+
+/* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
+.active,
+.accordion:hover {
+    background-color: #ccc;
+}
+
+/* Style the accordion panel. Note: hidden by default */
+.panel {
+    padding: 0 18px;
+    background-color: white;
+
+    overflow: hidden;
+}
+
+.tab-pane {
+    background: none;
+}
+.profile-tab-nav.border-right {
+    background: #000000e0;
+    color: white;
+    padding: 20px;
+}
+.tab-content {
+    min-height: 604px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-content: flex-start;
+    justify-content: flex-start;
+    align-items: stretch;
+}
+div#v-pills-tab {
+    background: none !important;
+}
+div#v-pills-tab a.active {
+    background: black;
+}
+h4.text-center {
+    color: white;
+}
+/* Avatar upload */
+
+body {
+    font-family: sans-serif;
+    background: #171c20;
+}
+.logoimg {
+    text-align: center;
+}
+.avatar-wrapper {
+    position: relative;
+    height: 200px;
+    width: 200px;
+    /* margin: 20px auto; */
+    margin: -100px auto 20px auto;
+    border-radius: 50%;
+    overflow: hidden;
+    /* box-shadow: 1px 1px 15px -5px black; */
+    box-shadow: none;
+    transition: all 0.3s ease;
+}
+
+.avatar-wrapper:hover {
+    transform: scale(1.05);
+    cursor: pointer;
+}
+
+.avatar-wrapper:hover .profile-pic {
+    opacity: 0.5;
+}
+
+.avatar-wrapper .profile-pic {
+    height: 100%;
+    width: 100%;
+    transition: all 0.3s ease;
+}
+
+.avatar-wrapper .profile-pic:after {
+    font-family: FontAwesome;
+    content: "\f007";
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    font-size: 190px;
+    background: #ecf0f1;
+    color: #34495e;
+    text-align: center;
+}
+
+.avatar-wrapper .upload-button {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+}
+
+.avatar-wrapper .upload-button .fa-arrow-circle-up {
+    position: absolute;
+    font-size: 243px;
+    top: -16px;
+    left: -5px;
+    text-align: center;
+    opacity: 0;
+    transition: all 0.3s ease;
+    color: #e4eae7;
+}
+
+.avatar-wrapper .upload-button:hover .fa-arrow-circle-up {
+    opacity: 0.9;
+}
+
+#avatar-header {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+}
+.avatar-header {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid;
+}
+.socialtitle input{
+    width: 100%;
+    text-align: center;
+    font-size: medium;
+    font-style: italic;
+}
+
+.nametitle {
+    color: #fff !important;
+}
+
+.nametitle h3 {
+    font-weight: 700 !important;
+}
+
+.avatar-tab li {
+    width: 50%;
+}
+
+.avatar-tab li i {
+    margin-bottom: 0px !important;
+}
+.socialtitle.text-center a img {
+    width: 20px;
+    cursor: pointer;
+    padding: 0px 10px;
+}
+.socialtitle.text-center a i {
+    color: #fff;
+    padding: 0px 10px;
+}
+.socialtitle.text-center a i:hover {
+    color: #000;
+}
+#v-pills-tabContent{
+    min-height: 604px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-content: flex-start;
+    justify-content: space-around;
+    align-items: stretch;
+}

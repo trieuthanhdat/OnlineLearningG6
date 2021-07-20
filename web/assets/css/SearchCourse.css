@@ -1,0 +1,107 @@
+.hardware-guides{
+    display: inline-flex;
+    align-content: flex-start;
+    flex-wrap: wrap;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+}
+.more-items{
+    display: flex;
+    flex-direction: column;
+}
+.trending-item {
+    border-block-end: 1px solid;
+    padding: 2px;
+    width: 100%;
+}
+.trending-item img{
+    vertical-align: middle;
+    min-width: 200px;
+    border-style: none;
+    padding-bottom: 10px;
+    min-height: 130px;
+    border: 1px #131212;
+    max-width: 200px;
+    max-height: 130px;
+
+}
+.trending-item img:hover{
+    opacity: 0.8;
+    transition: all 0.1s linear;
+}
+/* ================Accordian tab===================== */
+.accordian-tab{
+    margin-right: 15px;
+}
+.accordian-tab button{
+    font-size: large;
+    background: none;
+    border-bottom: 1px solid black;
+    font-weight: bold;
+}
+.searched-courses {
+    display: flex;
+    align-items: stretch;
+    justify-content: space-between;
+    border-bottom: 1px solid;
+    border-bottom-style: ridge;
+}
+.product-view .product-view-top.search-result{
+    background: none!important;
+    padding:0px!important;
+    margin-bottom: 0px!important;
+}
+.searchbox-head{
+    display: flex;
+    width: 50%;
+    height: 110%;
+}
+.collapse:not(.show) {
+    display: none;
+}
+.collapse.show{
+    display: block;
+}
+.searchbox-head select{
+    background: none;
+    border: 1px solid;
+    color: black;
+    font-size: large;
+    font-style: oblique;
+    margin: 5px 5px 22px;
+
+}
+
+section.container-fluid{
+    padding: 0px!important;
+}
+
+.filter-popper .btn{
+    color: #ffffff;
+    background: #000000;
+    border: 1px solid #000000;
+    padding: 10px;
+    padding-left: 15px;
+}
+.filter-popper svg{
+    transform: translate(-82px, 17px);
+    position: absolute;
+    overflow: hidden;
+    vertical-align: middle;
+    color: #ff6f51;
+}
+/* .searchbox-head select:nth-child(even){
+    margin-left: 33px;
+} */
+.container-fluid{
+    max-width: 1340px;
+}
+.structure svg{
+    transform: translate(-25px,-2px);
+}
+/* Popover */
+.popover{
+    max-width: 485px;
+
+}
